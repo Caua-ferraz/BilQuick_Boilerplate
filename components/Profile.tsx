@@ -22,7 +22,6 @@ export default function Profile() {
 	const { isFetching, data } = useUser();
 	const queryClient = useQueryClient();
 	const router = useRouter();
-
 	const pathname = usePathname();
 
 	if (isFetching) {
@@ -39,10 +38,12 @@ export default function Profile() {
 		}
 	};
 
+	const isSubscriber = !!data?.subscription?.subscription_id;
+
 	return (
 		<div>
 			{!data?.id ? (
-				<Link href="/auth" className=" animate-fade">
+				<Link href="/auth" className="animate-fade">
 					<Button variant="outline">SignIn</Button>
 				</Link>
 			) : (
@@ -55,7 +56,7 @@ export default function Profile() {
 									alt={data.display_name || ""}
 									width={50}
 									height={50}
-									className=" rounded-full  animate-fade ring-2 cursor-pointer"
+									className="rounded-full animate-fade ring-2 cursor-pointer"
 								/>
 							) : (
 								<div className="h-[50px] w-[50px] flex items-center justify-center ring-2 rounded-full text-2xl font-bold cursor-pointer">
@@ -67,10 +68,19 @@ export default function Profile() {
 					<DropdownMenuContent>
 						<DropdownMenuLabel>My Account</DropdownMenuLabel>
 						<DropdownMenuSeparator />
+						{isSubscriber && (
+							<>
+								<DropdownMenuItem>
+									<Link href="/dashboard">Dashboard</Link>
+								</DropdownMenuItem>
+								<DropdownMenuItem>
+									<Link href="/billing">Billing</Link>
+								</DropdownMenuItem>
+							</>
+						)}
 						<DropdownMenuItem onClick={handleLogout}>
 							Logout
 						</DropdownMenuItem>
-						<DropdownMenuItem>Billing</DropdownMenuItem>
 					</DropdownMenuContent>
 				</DropdownMenu>
 			)}

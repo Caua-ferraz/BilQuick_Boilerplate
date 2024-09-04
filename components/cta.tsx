@@ -33,6 +33,7 @@ const CTASection: React.FC = () => {
   };
 
   return (
+    // Main CTA section container
     <section className="w-full text-white py-16 px-4">
       {/* Content container */}
       <div className="max-w-4xl mx-auto text-center">
@@ -53,6 +54,7 @@ const CTASection: React.FC = () => {
           className="text-lg font-semibold text-orange-400 hover:text-orange-300 transition-colors duration-300 relative group"
         >
           Start Now 
+          {/* Glow effect on hover */}
           <span className="absolute inset-0 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 bg-orange-400 opacity-25 rounded-full blur-sm"></span>
         </Link>
       </div>

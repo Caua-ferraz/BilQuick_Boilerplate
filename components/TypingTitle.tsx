@@ -72,3 +72,58 @@ const TypingTitle: React.FC<TypingTitleProps> = ({
 };
 
 export default TypingTitle;
+
+// Customization options:
+
+// 1. Change the font size or style
+// Modify the className of the h1 element:
+// <h1 className="text-5xl font-bold italic">
+
+// 2. Adjust the colors
+// Change the text-primary and text-white classes:
+// <span className="text-blue-500">{preTextPart}</span>
+// <span className="text-yellow-300">{highlightedTextPart}</span>
+
+// 3. Modify the cursor style
+// Change the cursor character or style:
+// {isTypingComplete ? '▌' : (displayedText.length < fullText.length ? '▌' : '')}
+
+// 4. Add a delay before starting the animation
+// Wrap the typeText() call in a setTimeout:
+// useEffect(() => {
+//   const timer = setTimeout(() => {
+//     const cleanup = typeText();
+//     return cleanup;
+//   }, 1000); // 1 second delay
+//   return () => clearTimeout(timer);
+// }, [typeText]);
+
+// 5. Implement a loop or restart functionality
+// Add a state to control restarting and modify the useEffect:
+// const [shouldRestart, setShouldRestart] = useState(false);
+// useEffect(() => {
+//   if (isTypingComplete) {
+//     const timer = setTimeout(() => {
+//       setDisplayedText("");
+//       setIsTypingComplete(false);
+//       setShouldRestart(true);
+//     }, 2000); // Wait 2 seconds before restarting
+//     return () => clearTimeout(timer);
+//   }
+// }, [isTypingComplete]);
+
+// 6. Add a fade-in effect
+// Wrap the return statement in a div with a fade-in animation:
+// return (
+//   <div className="animate-fade-in">
+//     <h1 className="text-4xl font-extrabold">
+//       ...
+//     </h1>
+//   </div>
+// );
+
+// 7. Implement responsive font sizes
+// Use responsive class names for different screen sizes:
+// <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold">
+
+// Remember to add any new animations or responsive classes to your Tailwind CSS configuration if they're not already included.
