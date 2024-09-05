@@ -5,7 +5,6 @@ export type Json =
   | null
   | { [key: string]: Json | undefined }
   | Json[]
-
 export type Database = {
   public: {
     Tables: {
@@ -88,7 +87,6 @@ export type Database = {
     }
   }
 }
-
 export type Tables<
   PublicTableNameOrOptions extends
     | keyof (Database["public"]["Tables"] & Database["public"]["Views"])
@@ -134,7 +132,6 @@ export type TablesInsert<
     ? I
     : never
   : never
-
 export type TablesUpdate<
   PublicTableNameOrOptions extends
     | keyof Database["public"]["Tables"]
