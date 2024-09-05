@@ -19,43 +19,22 @@ export default function Price() {
 	// Define the pricing plans
 	const prices = [
 		{
-			title: "Starter",
-			description: "Start your next side project",
-			benefits: [
-				"Improved productivity",
-				"Enhanced performance",
-				"Cost savings",
-				"Improved communication",
-				"Enhanced collaboration",
-			],
-			amount: 99,
-			priceId: "price_1PuOP02KovIBh20to7a2fFQc",
-		},
-		{
 			title: "Pro",
-			description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry",
+			description: "Accelerate your SaaS development with our comprehensive boilerplate",
 			benefits: [
-				"Improved productivity",
-				"Enhanced performance",
-				"Cost savings",
-				"Improved communication",
-				"Enhanced collaboration",
+				"Next.js 14 with App Router",
+				"Supabase integration for auth and database",
+				"Stripe subscription management",
+				"Responsive Tailwind CSS design",
+				"Dark mode support",
+				"SEO optimization",
+				"TypeScript for type safety",
+				"React Query for efficient data fetching",
+				"Customizable components",
+				"Continuous updates and improvements",
 			],
-			amount: 199,
+			amount: 19.99,
 			priceId: "price_1PuOOH2KovIBh20tRyP70lj4",
-		},
-		{
-			title: "Enterprise",
-			description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry",
-			benefits: [
-				"Improved productivity",
-				"Enhanced performance",
-				"Cost savings",
-				"Improved communication",
-				"Enhanced collaboration",
-			],
-			amount: 299,
-			priceId: "price_1PuOPB2KovIBh20tyrnWpMrY",
 		},
 	];
 

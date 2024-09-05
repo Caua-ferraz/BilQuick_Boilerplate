@@ -17,10 +17,10 @@ interface SEOProps {
  * Customize these values to match your SaaS application
  */
 const defaultMeta = {
-  title: 'Your SaaS Name - Transform Your Workflow',
-  description: 'Your SaaS Name helps you streamline tasks, boost productivity, and achieve more in less time.',
-  keywords: 'saas, software, productivity, workflow, task management',
-  ogImage: '/og-image.png', // Make sure to add this image to your public folder
+  title: 'BilQuick - Launch Your SaaS Faster',
+  description: 'BilQuick is a powerful boilerplate that helps developers and entrepreneurs launch their SaaS products quickly and efficiently. Save time and focus on your core features.',
+  keywords: 'saas boilerplate, rapid development, startup toolkit, web application template, software as a service, nextjs, react, supabase, stripe',
+  ogImage: '/og-image-saasforge.png', // Make sure to create and add this image to your public folder
   ogType: 'website' as const,
   twitterCard: 'summary_large_image' as const,
 };
@@ -47,15 +47,21 @@ export function generateMetadata({
       description,
       type: ogType,
       images: [{ url: ogImage }],
+      siteName: 'BilQuick',
     },
     twitter: {
       card: twitterCard,
       title,
       description,
       images: [ogImage],
+      creator: '@MilliMercury', // Replace with your actual Twitter handle
     },
     icons: {
       icon: '/favicon.ico',
+    },
+    metadataBase: new URL('https://bilquick.com'), // Replace with your actual domain
+    alternates: {
+      canonical: '/',
     },
   };
 }
@@ -148,7 +154,7 @@ export function generateMetadata({
 // Example:
 // const defaultMeta = {
 //   title: 'Best Task Management SaaS for Small Teams | YourSaaS',
-//   description: 'Streamline your team's workflow with YourSaaS. Our task management solution helps small teams boost productivity and collaboration.',
+//   description: 'Streamline your team\'s workflow with YourSaaS. Our task management solution helps small teams boost productivity and collaboration.',
 //   keywords: 'task management, team productivity, small business software, project collaboration',
 //   ...
 // };
