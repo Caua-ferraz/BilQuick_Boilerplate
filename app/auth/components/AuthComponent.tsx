@@ -29,7 +29,7 @@ export default function AuthComponent() {
 				</div>
 
 				<p className="text-sm text-gray-300">
-					Register/SignIn Today 👇
+					Register/SignIn Today
 				</p>
 				<div className="flex flex-col gap-5">
 					<Button
