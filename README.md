@@ -1,8 +1,5 @@
 # Next.js + Supabase SaaS Boilerplate
 
-
-<img width="1789" alt="Screenshot 2024-03-05 at 12 31 42 AM" src="">
-
 This boilerplate provides a solid foundation for building modern SaaS applications using Next.js, Supabase, and other powerful technologies.
 
 ## Features
