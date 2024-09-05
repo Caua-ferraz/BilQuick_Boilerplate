@@ -119,18 +119,7 @@ export default function LandingPage() {
       {/* Footer Section */}
       <FadeIn>
         <footer className="container w-full border-t pt-10 px-4 bg-background">
-          <div className="text-center">
-            <h3 className="text-xl font-bold">Follow Us</h3>
-            <div className="mt-4 flex justify-center gap-5">
-              <Link href="https://www.youtube.com/c/DailyWebCoding" target="_blank" rel="noopener noreferrer">
-                <FaYoutube className="h-6 w-6 md:h-8 md:w-8 text-destructive hover:scale-105 transition-transform duration-fast" />
-              </Link>
-              <Link href="https://github.com/Chensokheng" target="_blank" rel="noopener noreferrer">
-                <FaGithub className="h-6 w-6 md:h-8 md:w-8 text-foreground hover:scale-105 transition-transform duration-fast" />
-              </Link>
-            </div>
             <p className="mt-4 text-sm md:text-base text-muted-foreground">© {new Date().getFullYear()} BilQuick. All rights reserved.</p>
-          </div>
         </footer>
       </FadeIn>
     </div>

@@ -8,6 +8,7 @@ import { supabaseBrowser } from "@/lib/supabase/browser";
 import { useQueryClient } from "@tanstack/react-query";
 import { usePathname, useRouter } from "next/navigation";
 import { protectedPaths } from "@/lib/constant";
+import { manageBilling } from "@/lib/actions/stripe";
 
 import {
 	DropdownMenu,
@@ -35,6 +36,24 @@ export default function Profile() {
 		router.refresh();
 		if (protectedPaths.includes(pathname)) {
 			router.replace("/auth?next=" + pathname);
+		}
+	};
+
+	const handleBilling = async () => {
+		if (data?.subscription?.customer_id) {
+			try {
+				const response = await manageBilling(data.subscription.customer_id);
+				const billingData = JSON.parse(response);
+				if (billingData.error) {
+					console.error(billingData.error);
+					// Handle the error appropriately (e.g., show an error message to the user)
+				} else {
+					window.location.href = billingData.url;
+				}
+			} catch (error) {
+				console.error("Error handling billing:", error);
+				// Handle the error appropriately (e.g., show an error message to the user)
+			}
 		}
 	};
 
@@ -73,8 +92,8 @@ export default function Profile() {
 								<DropdownMenuItem>
 									<Link href="/dashboard">Dashboard</Link>
 								</DropdownMenuItem>
-								<DropdownMenuItem>
-									<Link href="/billing">Billing</Link>
+								<DropdownMenuItem onSelect={handleBilling}>
+									Billing
 								</DropdownMenuItem>
 							</>
 						)}
