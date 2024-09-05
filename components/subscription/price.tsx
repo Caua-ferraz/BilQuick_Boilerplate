@@ -56,33 +56,30 @@ export default function Price() {
 	}
 
 	return (
-		<div>
-			<div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+		<div className="flex justify-center">
+			<div className="max-w-md w-full">
 				{prices.map((price, index) => {
 					const isPopular = index === 1; // Check if it's the "Pro" plan (second in the list)
 
 					return (
 						<div
 							key={index}
-							className={cn(
-								"relative border rounded-md p-5 space-y-5",
-								{
-									"ring-2 ring-green-500": isPopular, // Add highlight to the popular plan
-								}
-							)}
+							className="relative border rounded-md p-5 space-y-5"
 						>
-							{/* "Recommended" label for the popular plan */}
-							{isPopular && (
-								<span className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-6 rotate-12 text-green-500 font-bold text-lg opacity-80">
-									Recommended
-								</span>
-							)}
+							{/* Recommended label */}
+							<span className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-green-500 text-white px-2 py-1 rounded-full text-sm font-semibold">
+								Recommended
+							</span>
 
-							<div className="space-y-3">
-								<h1 className="text-2xl font-bold">{price.title}</h1>
-								<h1 className="text-3xl font-bold">{price.amount}$</h1>
+							<div className="space-y-3 text-center">
+								<h1 className="text-3xl font-bold">{price.title}</h1>
+								<div className="flex items-center justify-center">
+									<span className="text-4xl font-bold">${price.amount}</span>
+									<span className="text-xl ml-1">/month</span>
+								</div>
 								<p className="text-sm text-gray-400">{price.description}</p>
 							</div>
+
 							<div className="space-y-3">
 								{price.benefits.map((benefit, index) => (
 									<div key={index} className="flex items-center gap-2">
