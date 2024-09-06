@@ -8,8 +8,11 @@ interface SEOProps {
   description?: string;
   keywords?: string;
   ogImage?: string;
-  ogType?: 'website' | 'article' | 'book' | 'profile';
+  ogType?: 'website' | 'article' | 'product';
   twitterCard?: 'summary' | 'summary_large_image' | 'app' | 'player';
+  canonicalUrl?: string;
+  noIndex?: boolean;
+  noFollow?: boolean;
 }
 
 /**
@@ -18,11 +21,12 @@ interface SEOProps {
  */
 const defaultMeta = {
   title: 'BilQuick - Launch Your SaaS Faster',
-  description: 'BilQuick is a powerful boilerplate that helps developers and entrepreneurs launch their SaaS products quickly and efficiently. Save time and focus on your core features.',
-  keywords: 'saas boilerplate, rapid development, startup toolkit, web application template, software as a service, nextjs, react, supabase, stripe',
-  ogImage: '/og-image-saasforge.png', // Make sure to create and add this image to your public folder
+  description: 'BilQuick is the ultimate SaaS boilerplate. Build and launch your startup in days, not months. Next.js, React, Tailwind CSS, and more.',
+  keywords: 'saas boilerplate, next.js template, react starter, tailwind css, supabase, stripe integration, rapid development',
+  ogImage: '/og-image-bilquick.png',
   ogType: 'website' as const,
   twitterCard: 'summary_large_image' as const,
+  canonicalUrl: 'https://bilquick.com',
 };
 
 /**
@@ -37,31 +41,51 @@ export function generateMetadata({
   ogImage = defaultMeta.ogImage,
   ogType = defaultMeta.ogType,
   twitterCard = defaultMeta.twitterCard,
+  canonicalUrl = defaultMeta.canonicalUrl,
+  noIndex = false,
+  noFollow = false,
 }: SEOProps): Metadata {
+  const metaTitle = title === defaultMeta.title ? title : `${title} | BilQuick`;
+
   return {
-    title,
+    title: metaTitle,
     description,
     keywords,
+    authors: [{ name: 'BilQuick Team' }],
     openGraph: {
-      title,
+      title: metaTitle,
       description,
-      type: ogType,
-      images: [{ url: ogImage }],
+      type: ogType as 'article' | 'website', // Explicitly cast to allowed types
+      images: [{ url: ogImage, width: 1200, height: 630, alt: metaTitle }],
       siteName: 'BilQuick',
     },
     twitter: {
       card: twitterCard,
-      title,
+      title: metaTitle,
       description,
       images: [ogImage],
-      creator: '@MilliMercury', // Replace with your actual Twitter handle
+      creator: '@BilQuickHQ',
     },
     icons: {
       icon: '/favicon.ico',
+      apple: '/apple-touch-icon.png',
     },
-    metadataBase: new URL('https://bilquick.com'), // Replace with your actual domain
+    metadataBase: new URL('https://bilquick.com'),
     alternates: {
-      canonical: '/',
+      canonical: canonicalUrl,
+    },
+    robots: {
+      index: !noIndex,
+      follow: !noFollow,
+      googleBot: {
+        index: !noIndex,
+        follow: !noFollow,
+      },
+    },
+    viewport: {
+      width: 'device-width',
+      initialScale: 1,
+      maximumScale: 1,
     },
   };
 }
