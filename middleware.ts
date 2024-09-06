@@ -59,13 +59,13 @@ export async function middleware(request: NextRequest) {
 	const url = new URL(request.url);
 	if (data.session) {
 		if (url.pathname === "/auth") {
-			return NextResponse.redirect(new URL("/", request.url));
+			return NextResponse.redirect(new URL("/", url.origin));
 		}
 		return response;
 	} else {
 		if (protectedPaths.includes(url.pathname)) {
 			return NextResponse.redirect(
-				new URL("/auth?next=" + url.pathname, request.url)
+				new URL(`/auth?next=${url.pathname}`, url.origin)
 			);
 		}
 		return response;
