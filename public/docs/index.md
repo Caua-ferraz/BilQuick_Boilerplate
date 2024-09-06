@@ -51,6 +51,66 @@ This boilerplate provides a solid foundation for building modern SaaS applicatio
 - `/types`: TypeScript type definitions
 - `/hooks`: Custom React hooks
 
+### Folder Structure
+```
+.
+├── app/
+│ ├── api/
+│ │ ├── docs/
+│ │ │ └── route.ts
+│ │ └── docs-list/
+│ │ └── route.ts
+│ ├── documentation/
+│ │ └── page.tsx
+│ ├── hook/
+│ │ └── useUser.ts
+│ ├── privacity/
+│ │ └── page.tsx
+│ ├── success/
+│ │ └── page.tsx
+│ ├── terms/
+│ │ └── page.tsx
+│ ├── globals.css
+│ ├── layout.tsx
+│ └── page.tsx
+├── components/
+│ ├── subscription/
+│ │ └── price.tsx
+│ ├── ui/
+│ │ ├── button.tsx
+│ │ ├── card.tsx
+│ │ ├── carousel.tsx
+│ │ └── video.tsx
+│ ├── Navbar.tsx
+│ ├── SEO.tsx
+│ ├── cta.tsx
+│ ├── fadein.tsx
+│ ├── query-provider.tsx
+│ ├── theme-provider.tsx
+│ └── TypingTitle.tsx
+├── lib/
+│ └── utils.ts
+├── public/
+│ ├── docs/
+│ │ ├── index.md
+│ │ ├── seo_documentation.md
+│ │ ├── stripe_integration.md
+│ │ └── TypingTitle.md
+│ └── vercel.svg
+├── styles/
+│ └── globals.css
+├── types/
+│ └── index.ts
+├── .env.example
+├── .eslintrc.json
+├── .gitignore
+├── next.config.mjs
+├── package.json
+├── postcss.config.js
+├── README.md
+├── tailwind.config.ts
+└── tsconfig.json
+```
 ## Key Components
 
 - `SEO.tsx`: Customizable SEO component for better search engine optimization

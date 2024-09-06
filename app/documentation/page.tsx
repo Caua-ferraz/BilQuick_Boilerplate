@@ -8,35 +8,62 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import FadeIn from "@/components/fadein";
 
 async function getDocContent(filePath: string) {
-  const response = await fetch(`/api/docs?file=${filePath}`);
-  if (!response.ok) return null;
-  return await response.text();
+  try {
+    const response = await fetch(`/api/docs?file=${filePath}`);
+    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+    return await response.text();
+  } catch (error) {
+    console.error("Failed to fetch doc content:", error);
+    return null;
+  }
 }
 
 async function getDocFiles() {
-  const response = await fetch('/api/docs-list');
-  if (!response.ok) return [];
-  return await response.json();
+  try {
+    const response = await fetch('/api/docs-list');
+    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+    return await response.json();
+  } catch (error) {
+    console.error("Failed to fetch doc files:", error);
+    return [];
+  }
 }
 
 export default function DocumentationPage() {
-  const { data: user, isLoading } = useUser();
+  const { data: user, isLoading: userLoading } = useUser();
   const [docFiles, setDocFiles] = useState<string[]>([]);
   const [selectedDoc, setSelectedDoc] = useState('index');
   const [docHtml, setDocHtml] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    if (!isLoading && !user?.subscription?.subscription_id) {
-      redirect("/");
-    }
-  }, [isLoading, user]);
-
-  useEffect(() => {
-    getDocFiles().then(setDocFiles);
+    setIsLoading(true);
+    getDocFiles().then(files => {
+      if (files.length === 0) {
+        setError("No documentation files found. Please check the server configuration.");
+      } else {
+        setDocFiles(files);
+        setSelectedDoc(files[0]); // Select the first document by default
+        setError(null);
+      }
+      setIsLoading(false);
+    });
   }, []);
 
   useEffect(() => {
-    getDocContent(selectedDoc).then(setDocHtml);
+    if (selectedDoc) {
+      setIsLoading(true);
+      getDocContent(selectedDoc).then(content => {
+        if (content === null) {
+          setError(`Failed to load documentation for "${selectedDoc}". Please check if the file exists on the server.`);
+        } else {
+          setDocHtml(content);
+          setError(null);
+        }
+        setIsLoading(false);
+      });
+    }
   }, [selectedDoc]);
 
   if (isLoading) {
@@ -79,7 +106,18 @@ export default function DocumentationPage() {
 
         {/* Main content area */}
         <main className="flex-1 overflow-auto p-8 bg-gray-900 text-white">
-          {docHtml ? (
+          {isLoading ? (
+            <div className="flex justify-center items-center h-full">
+              <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+            </div>
+          ) : error ? (
+            <div className="text-red-500">
+              <p>{error}</p>
+              <p className="mt-4">
+                If this issue persists, please contact support or check the server logs for more information.
+              </p>
+            </div>
+          ) : docHtml ? (
             <div 
               className="prose prose-invert max-w-none" 
               dangerouslySetInnerHTML={{ __html: docHtml }} 
@@ -87,8 +125,7 @@ export default function DocumentationPage() {
           ) : (
             <div>
               <h1 className="text-3xl font-bold mb-6">Documentation</h1>
-              <p>The requested documentation page could not be found.</p>
-              <p>Please select a topic from the menu on the left.</p>
+              <p>Select a document from the sidebar to view its content.</p>
             </div>
           )}
         </main>
