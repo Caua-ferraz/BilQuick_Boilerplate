@@ -1,3 +1,5 @@
+import { SpeedInsights } from "@vercel/speed-insights/next"
+import { Analytics } from "@vercel/analytics/react"
 import React from "react";
 import Price from "@/components/subscription/price";
 import TypingTitle from "@/components/TypingTitle";
@@ -86,8 +88,10 @@ export default function LandingPage() {
       {/* Hero Section */}
       <section className="text-center space-y-6 py-10 md:py-20 px-4 w-full bg-gradient-to-b from-background to-background/80">
         <FadeIn>
-          <TypingTitle preText="Transform Your Billing with " highlightedText="BilQuick" />
+          <TypingTitle preText="Transform Your SaaS with " highlightedText="BilQuick" />
         </FadeIn>
+        <SpeedInsights />
+        <Analytics />
         <FadeIn>
           <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
             Stop wasting time with the website, let BilQuick handle it.

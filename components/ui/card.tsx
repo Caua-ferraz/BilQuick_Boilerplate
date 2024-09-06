@@ -23,7 +23,7 @@ interface CardProps {
  * @param {CardProps} props - The props for the Card component
  */
 export function Card({ children, className }: CardProps) {
-	return <div className={cn("bg-white shadow-md rounded-lg", className)}>{children}</div>;
+	return <div className={cn("bg-transparent border-black shadow-md rounded-lg", className)}>{children}</div>;
 }
 
 /**

@@ -5,6 +5,7 @@ import useUser from "@/app/hook/useUser";
 import DashboardContent from "@/components/DashboardContent";
 import FadeIn from "@/components/fadein";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import Link from "next/link";
 
 export default function DashboardPage() {
 	const { data: user, isLoading } = useUser();
@@ -40,8 +41,15 @@ export default function DashboardPage() {
 						<DashboardContent user={user} />
 					</div>
 					<div className="bg-blue-800 rounded-lg p-6">
-						<h2 className="text-2xl font-semibold mb-4 text-center">Quick Actions</h2>
-						{/* Add quick action buttons or links here */}
+						<h2 className="text-2xl font-semibold mb-4 text-center text-white">Quick Actions</h2>
+						<div className="flex flex-col space-y-4">
+							<Link href="/documentation" className="bg-white text-blue-800 font-semibold py-2 px-4 rounded hover:bg-blue-100 transition-colors duration-200 text-center">
+								Documentation
+							</Link>
+							<a href="https://discord.gg/gDE7PAf7Cy" target="_blank" rel="noopener noreferrer" className="bg-indigo-600 text-white font-semibold py-2 px-4 rounded hover:bg-indigo-700 transition-colors duration-200 text-center">
+								Join our Discord
+							</a>
+						</div>
 					</div>
 				</div>
 			</div>
