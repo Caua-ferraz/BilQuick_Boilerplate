@@ -17,7 +17,6 @@ import { cn } from "@/lib/utils";
 interface CheckoutProps {
     priceId: string;
 }
-
 /**
  * Checkout Component
  * 
@@ -67,7 +66,6 @@ export default function Checkout({ priceId }: CheckoutProps) {
             router.push("/auth?next=" + location.pathname);
         }
     };
-
     return (
         <Button
             className="w-full flex items-center gap-2"

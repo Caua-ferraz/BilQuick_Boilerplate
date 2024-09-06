@@ -19,7 +19,7 @@ This boilerplate provides a solid foundation for building modern SaaS applicatio
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-repo/next-supabase-saas-boilerplate.git
+   git clone https://github.com/Caua-ferraz/BilQuick_Boilerplate.git
    cd next-supabase-saas-boilerplate
    ```
 
