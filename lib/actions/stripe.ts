@@ -9,15 +9,14 @@ export async function checkout(
 ) {
 	return JSON.stringify(
 		await stripe.checkout.sessions.create({
-			success_url: `${process.env.NEXT_PUBLIC_BASE_URL}/success`,
-			cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL}/`,
+			success_url: redirectTo || process.env.SITE_URL,
+			cancel_url: process.env.SITE_URL,
 			customer_email: email,
 			line_items: [{ price: priceId, quantity: 1 }],
 			mode: "subscription",
 		})
 	);
 }
-
 export async function manageBilling(customer_id: string) {
 	return JSON.stringify(
 		await stripe.billingPortal.sessions.create({
