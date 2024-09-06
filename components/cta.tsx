@@ -39,12 +39,12 @@ const CTASection: React.FC = () => {
       <div className="max-w-4xl mx-auto text-center">
         {/* Main heading */}
         <h2 className="text-3xl md:text-4xl font-bold mb-4">
-          Stop Wasting Time. Start Billing. Get Paid <span className="text-orange-400">QUICK</span>!
+          Start your business and get paid <span className="text-orange-400">QUICK</span>!
         </h2>
         
         {/* Subheading */}
         <p className="text-xl mb-8">
-          BilQuick streamlines your billing process, so you can focus on what really matters - growing your business.
+          Let us handle the website so you can focus on what really matters - growing your business.
         </p>
         
         {/* CTA Link */}

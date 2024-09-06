@@ -34,7 +34,7 @@ export default function Price() {
 				"Continuous updates and improvements",
 			],
 			amount: 19.99,
-			priceId: "price_1Pvnt52KovIBh20tYw2ahgon",
+			priceId: "price_1PvrHL2KovIBh20tlYiGobij",
 		},
 	];
 
