@@ -17,9 +17,9 @@ import Image from "next/image";
 import { Carousel } from "@/components/ui/carousel";
 
 export const metadata: Metadata = generateMetadata({
-  title: "BilQuick - Transform Your Billing Workflow",
-  description: "BilQuick helps you streamline tasks, boost productivity, and get paid faster than ever before.",
-  keywords: "billing, invoicing, productivity, workflow, task management, automation",
+  title: "BilQuick - Launch Your SaaS Faster",
+  description: "BilQuick is the ultimate SaaS boilerplate. Build and launch your startup in days, not months. Next.js, React, Tailwind CSS, and more.",
+  keywords: "saas boilerplate, next.js template, react starter, tailwind css, supabase, stripe integration, rapid development",
   ogType: "website",
   twitterCard: "summary_large_image"
 });
