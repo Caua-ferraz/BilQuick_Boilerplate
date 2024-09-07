@@ -4,7 +4,7 @@ import { manageBilling } from "@/lib/actions/stripe";
 import { FaDiscord } from "react-icons/fa";
 
 interface DashboardContentProps {
-  user: any; // Replace 'any' with your actual user type
+  user: any;
 }
 
 export default function DashboardContent({ user }: DashboardContentProps) {

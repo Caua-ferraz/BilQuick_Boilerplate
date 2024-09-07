@@ -1,14 +1,27 @@
-import React from "react";
+import React, { useState } from "react";
+import { cn } from "@/lib/utils";
 
 /**
  * VideoProps interface defines the expected props for the Video component.
  * 
  * @property videoId - The YouTube video ID (the part after "v=" in a YouTube URL)
  * @property title - The title of the video (used for accessibility and SEO)
+ * @property aspectRatio - The aspect ratio of the video (default is 16:9)
+ * @property className - Custom classes for styling
+ * @property autoplay - Whether the video should autoplay (default is false)
+ * @property muted - Whether the video should be muted (default is false)
+ * @property posterUrl - The URL of the poster image (optional)
+ * @property lazyLoad - Whether the iframe should use lazy loading (default is true)
  */
 interface VideoProps {
     videoId: string;
     title: string;
+    aspectRatio?: "16:9" | "4:3";
+    className?: string;
+    autoplay?: boolean;
+    muted?: boolean;
+    posterUrl?: string;
+    lazyLoad?: boolean;
 }
 
 /**
@@ -19,17 +32,58 @@ interface VideoProps {
  * 
  * @param {VideoProps} props - The props for the Video component
  */
-const Video: React.FC<VideoProps> = ({ videoId, title }) => {
+const Video: React.FC<VideoProps> = ({
+    videoId,
+    title,
+    aspectRatio = "16:9",
+    className,
+    autoplay = false,
+    muted = false,
+    posterUrl,
+    lazyLoad = true,
+}) => {
+    const [showVideo, setShowVideo] = useState(!posterUrl);
+    const [error, setError] = useState(false);
+
+    const aspectRatioStyles = {
+        "16:9": { paddingBottom: "56.25%" },
+        "4:3": { paddingBottom: "75%" },
+    };
+
+    const handlePosterClick = () => setShowVideo(true);
+
+    const iframeProps = {
+        className: "absolute top-0 left-0 w-full h-full",
+        src: `https://www.youtube.com/embed/${videoId}${autoplay ? '?autoplay=1' : ''}${muted ? '&mute=1' : ''}`,
+        title,
+        frameBorder: "0",
+        allow: "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture",
+        allowFullScreen: true,
+        loading: lazyLoad ? ("lazy" as const) : undefined,
+        onError: () => setError(true),
+    };
+
     return (
-        <div className="relative pb-9/16" style={{ paddingBottom: "56.25%" }}>
-            <iframe
-                className="absolute top-0 left-0 w-full h-full"
-                src={`https://www.youtube.com/embed/${videoId}`}
-                title={title}
-                frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-            ></iframe>
+        <div className={cn("relative", className)} style={aspectRatioStyles[aspectRatio]}>
+            {error ? (
+                <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center bg-gray-200">
+                    <p>Failed to load video. Please try again later.</p>
+                </div>
+            ) : showVideo ? (
+                <iframe {...iframeProps}></iframe>
+            ) : (
+                <div 
+                    className="absolute top-0 left-0 w-full h-full bg-cover bg-center cursor-pointer"
+                    style={{ backgroundImage: `url(${posterUrl})` }}
+                    onClick={handlePosterClick}
+                >
+                    <div className="absolute inset-0 flex items-center justify-center">
+                        <svg className="w-20 h-20 text-white" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M8 5v10l8-5-8-5z" />
+                        </svg>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
@@ -37,7 +91,7 @@ const Video: React.FC<VideoProps> = ({ videoId, title }) => {
 export default Video;
 
 // Usage example:
-// <Video videoId="dQw4w9WgXcQ" title="Rick Astley - Never Gonna Give You Up (Official Music Video)" />
+// <Video videoId="dQw4w9WgXcQ" title="Rick Astley - Never Gonna Give You Up" aspectRatio="16:9" className="my-4 shadow-lg rounded-lg overflow-hidden" autoplay={false} muted={true} posterUrl="/path-to-poster-image.jpg" lazyLoad={true} />
 
 // Customization options:
 

@@ -50,7 +50,7 @@ export function generateMetadata({
   return {
     title: metaTitle,
     description,
-    keywords,
+    keywords: keywords?.split(',').map(keyword => keyword.trim()), // Converts keywords to an array
     authors: [{ name: 'BilQuick Team' }],
     openGraph: {
       title: metaTitle,
@@ -70,7 +70,7 @@ export function generateMetadata({
       icon: '/favicon.ico',
       apple: '/apple-touch-icon.png',
     },
-    metadataBase: new URL('https://bilquick.com'),
+    metadataBase: new URL(canonicalUrl),
     alternates: {
       canonical: canonicalUrl,
     },

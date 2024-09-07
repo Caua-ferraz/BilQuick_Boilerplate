@@ -1,5 +1,3 @@
-// File: /pages/index.tsx
-
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from "@vercel/analytics/react";
 import dynamic from 'next/dynamic';
@@ -13,6 +11,7 @@ import FadeIn from "@/components/fadein";
 import { generateMetadata } from "@/components/SEO";
 import type { Metadata } from 'next';
 import { useState } from 'react';
+import WhyBetter from "@/components/WhyBetter";
 
 const Price = dynamic(() => import("@/components/subscription/price"), { ssr: false, loading: () => <p>Loading Pricing...</p> });
 const TypingTitle = dynamic(() => import("@/components/TypingTitle"), { loading: () => <p>Loading Title...</p> });
@@ -84,31 +83,6 @@ const testimonials = [
 ];
 
 const userCount = 47;
-
-const FeatureCard = React.memo(({ icon, title, description }: { icon: React.ReactNode; title: string; description: string }) => (
-  <FadeIn>
-    <div className="bg-background p-4 sm:p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-default flex flex-col items-center text-center">
-      <div className="mb-3 sm:mb-4">{icon}</div>
-      <h3 className="text-lg sm:text-xl font-semibold mb-2">{title}</h3>
-      <p className="text-sm sm:text-base text-muted-foreground">{description}</p>
-    </div>
-  </FadeIn>
-));
-
-const FeaturesSection = React.memo(() => (
-  <section className="w-full py-10 sm:py-16 bg-card">
-    <div className="container max-w-6xl mx-auto px-2 sm:px-4">
-      <FadeIn>
-        <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center mb-8 sm:mb-12">Powerful Features to Accelerate Your SaaS</h2>
-      </FadeIn>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-8">
-        {features.map((feature, index) => (
-          <FeatureCard key={index} {...feature} />
-        ))}
-      </div>
-    </div>
-  </section>
-));
 
 const TestimonialCard = React.memo(({ quote, author, benefit }: { quote: string; author: string; benefit: string }) => (
   <div className="bg-card p-4 rounded-lg shadow-lg flex flex-col justify-between h-full">
@@ -235,9 +209,9 @@ export default function LandingPage() {
         <CTASection />
       </FadeIn>
 
-      {/* Features Section */}
+      {/* Why Better Section */}
       <FadeIn>
-        <FeaturesSection />
+        <WhyBetter />
       </FadeIn>
 
       {/* Pricing Section */}

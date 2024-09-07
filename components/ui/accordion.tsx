@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { cn } from "@/lib/utils";
+import { ChevronDown } from "lucide-react";
 
 /**
  * AccordionProps Interface
@@ -10,12 +11,14 @@ import { cn } from "@/lib/utils";
  * @property type - The type of accordion behavior ('single' or 'multiple').
  * @property collapsible - Whether the accordion items can all be closed.
  * @property className - Optional additional CSS classes to be applied to the wrapper div.
+ * @property defaultOpenItems - An array of item values that should be open by default.
  */
 interface AccordionProps {
 	children: React.ReactNode;
 	type?: "single" | "multiple";
 	collapsible?: boolean;
 	className?: string;
+	defaultOpenItems?: string[];
 }
 
 /**
@@ -25,8 +28,32 @@ interface AccordionProps {
  * 
  * @param {AccordionProps} props - The props for the Accordion component
  */
-export function Accordion({ children, type = "single", collapsible = false, className }: AccordionProps) {
-	return <div className={cn("border rounded-lg", className)}>{children}</div>;
+export function Accordion({ children, type = "single", collapsible = false, className, defaultOpenItems = [] }: AccordionProps) {
+	const [openItems, setOpenItems] = useState<string[]>(defaultOpenItems);
+
+	const toggleItem = useCallback((value: string) => {
+		setOpenItems(prev => 
+			type === "single" 
+				? (prev.includes(value) && collapsible ? [] : [value])
+				: prev.includes(value)
+					? prev.filter(item => item !== value)
+					: [...prev, value]
+		);
+	}, [type, collapsible]);
+
+	return (
+		<div className={cn("border rounded-lg", className)}>
+			{React.Children.map(children, child => {
+				if (React.isValidElement(child) && child.type === AccordionItem) {
+					return React.cloneElement(child, { 
+						isOpen: openItems.includes(child.props.value as string),
+						onToggle: () => toggleItem(child.props.value as string)
+					} as Partial<AccordionItemProps>);
+				}
+				return child;
+			})}
+		</div>
+	);
 }
 
 /**
@@ -37,11 +64,15 @@ export function Accordion({ children, type = "single", collapsible = false, clas
  * @property value - A unique identifier for the accordion item.
  * @property children - The content of the accordion item.
  * @property className - Optional additional CSS classes.
+ * @property isOpen - Whether the accordion item is open.
+ * @property onToggle - A callback function to toggle the accordion item.
  */
 interface AccordionItemProps {
 	value: string;
 	children: React.ReactNode;
 	className?: string;
+	isOpen?: boolean;
+	onToggle?: () => void;
 }
 
 /**
@@ -51,8 +82,22 @@ interface AccordionItemProps {
  * 
  * @param {AccordionItemProps} props - The props for the AccordionItem component
  */
-export function AccordionItem({ value, children, className }: AccordionItemProps) {
-	return <div className={cn("border-b last:border-none", className)}>{children}</div>;
+export function AccordionItem({ value, children, className, isOpen, onToggle }: AccordionItemProps) {
+	return (
+		<div className={cn("border-b last:border-none", className)}>
+			{React.Children.map(children, child => {
+				if (React.isValidElement(child)) {
+					if (child.type === AccordionTrigger) {
+						return React.cloneElement(child, { isOpen, onToggle } as Partial<AccordionTriggerProps>);
+					}
+					if (child.type === AccordionContent) {
+						return React.cloneElement(child, { isOpen } as Partial<AccordionContentProps>);
+					}
+				}
+				return child;
+			})}
+		</div>
+	);
 }
 
 /**
@@ -62,10 +107,14 @@ export function AccordionItem({ value, children, className }: AccordionItemProps
  * 
  * @property children - The content of the accordion trigger (usually a title or summary).
  * @property className - Optional additional CSS classes.
+ * @property isOpen - Whether the accordion trigger is open.
+ * @property onToggle - A callback function to toggle the accordion trigger.
  */
 interface AccordionTriggerProps {
 	children: React.ReactNode;
 	className?: string;
+	isOpen?: boolean;
+	onToggle?: () => void;
 }
 
 /**
@@ -75,10 +124,20 @@ interface AccordionTriggerProps {
  * 
  * @param {AccordionTriggerProps} props - The props for the AccordionTrigger component
  */
-export function AccordionTrigger({ children, className }: AccordionTriggerProps) {
+export function AccordionTrigger({ children, className, isOpen, onToggle }: AccordionTriggerProps) {
 	return (
-		<button className={cn("w-full text-left py-4 px-4 flex justify-between items-center", className)}>
+		<button 
+			className={cn("w-full text-left py-4 px-4 flex justify-between items-center", className)}
+			onClick={onToggle}
+			onKeyDown={(e) => {
+				if (e.key === 'Enter' || e.key === ' ') {
+					e.preventDefault();
+					onToggle?.();
+				}
+			}}
+		>
 			{children}
+			<ChevronDown className={`transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} />
 		</button>
 	);
 }
@@ -90,10 +149,12 @@ export function AccordionTrigger({ children, className }: AccordionTriggerProps)
  * 
  * @property children - The content to be displayed when the accordion item is expanded.
  * @property className - Optional additional CSS classes.
+ * @property isOpen - Whether the accordion content is open.
  */
 interface AccordionContentProps {
 	children: React.ReactNode;
 	className?: string;
+	isOpen?: boolean;
 }
 
 /**
@@ -103,8 +164,18 @@ interface AccordionContentProps {
  * 
  * @param {AccordionContentProps} props - The props for the AccordionContent component
  */
-export function AccordionContent({ children, className }: AccordionContentProps) {
-	return <div className={cn("px-4 pb-4", className)}>{children}</div>;
+export function AccordionContent({ children, className, isOpen }: AccordionContentProps) {
+	return (
+		<div 
+			className={cn(
+				"overflow-hidden transition-all duration-300 ease-in-out",
+				isOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0",
+				className
+			)}
+		>
+			<div className="px-4 pb-4">{children}</div>
+		</div>
+	);
 }
 
 // Customization options:
