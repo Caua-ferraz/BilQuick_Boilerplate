@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React, { useEffect, useState } from 'react';
 
 /**
@@ -32,16 +32,13 @@ interface FadeInProps {
  * @param {FadeInProps} props - The props for the FadeIn component
  */
 const FadeIn: React.FC<FadeInProps> = ({ children, className = '' }) => {
-  // State to control visibility of the component
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    // Set a timeout to trigger the fade-in effect
-    // You can adjust the delay (100ms) as needed
-    const timer = setTimeout(() => setIsVisible(true), 100);
+    const delay = 100; // Delay before fade-in starts (in milliseconds)
+    const timer = setTimeout(() => setIsVisible(true), delay);
 
-    // Cleanup function to clear the timeout if the component unmounts
-    return () => clearTimeout(timer);
+    return () => clearTimeout(timer); // Cleanup the timeout on component unmount
   }, []);
 
   return (

@@ -1,11 +1,11 @@
 "use client";
 
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 
 interface TypingTitleProps {
   preText: string;
   highlightedText: string;
-  speed?: number;
+  speed?: 100;
 }
 
 /**
@@ -23,39 +23,33 @@ const TypingTitle: React.FC<TypingTitleProps> = ({
   highlightedText,
   speed = 50,
 }) => {
-  // State to hold the currently displayed text
   const [displayedText, setDisplayedText] = useState("");
-  // State to track if the typing animation is complete
   const [isTypingComplete, setIsTypingComplete] = useState(false);
-  // Combine preText and highlightedText
+  const currentIndex = useRef(0);
   const fullText = `${preText}${highlightedText}`;
 
-  // Function to handle the typing animation
+  // Typing animation handler using requestAnimationFrame
   const typeText = useCallback(() => {
-    let currentIndex = 0;
-    const intervalId = setInterval(() => {
-      if (currentIndex < fullText.length) {
-        // Add the next character to the displayed text
-        setDisplayedText(fullText.slice(0, currentIndex + 1));
-        currentIndex++;
+    const updateText = () => {
+      if (currentIndex.current < fullText.length) {
+        setDisplayedText(fullText.slice(0, currentIndex.current + 1));
+        currentIndex.current++;
+        setTimeout(() => requestAnimationFrame(updateText), speed); // Delay for typing effect
       } else {
-        // Typing is complete, clear the interval and set the state
-        clearInterval(intervalId);
         setIsTypingComplete(true);
       }
-    }, speed);
+    };
+    requestAnimationFrame(updateText);
 
-    // Cleanup function to clear the interval if the component unmounts
-    return () => clearInterval(intervalId);
+    // Cleanup in case of unmount
+    return () => cancelAnimationFrame(updateText as any);
   }, [fullText, speed]);
 
-  // Effect to start the typing animation
   useEffect(() => {
     const cleanup = typeText();
     return cleanup;
   }, [typeText]);
 
-  // Split the displayed text into preText and highlightedText parts
   const preTextPart = displayedText.slice(0, preText.length);
   const highlightedTextPart = displayedText.slice(preText.length);
 
@@ -64,8 +58,8 @@ const TypingTitle: React.FC<TypingTitleProps> = ({
       <span className="text-primary">{preTextPart}</span>
       <span className="text-white">{highlightedTextPart}</span>
       {/* Blinking cursor */}
-      <span className={`${isTypingComplete ? 'animate-fast-blink' : ''}`}>
-        {isTypingComplete ? '|' : (displayedText.length < fullText.length ? '|' : '')}
+      <span className={isTypingComplete ? 'animate-fast-blink' : ''}>
+        {isTypingComplete ? '|' : displayedText.length < fullText.length ? '|' : ''}
       </span>
     </h1>
   );
