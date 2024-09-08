@@ -8,7 +8,10 @@ import { generateMetadata } from "@/components/SEO";
 
 const inter = Inter({ subsets: ["latin"] });
 
-export const metadata: Metadata = generateMetadata({});
+export const metadata: Metadata = generateMetadata({
+  title: "Your Site Title",
+  description: "Your site description goes here"
+});
 
 export default function RootLayout({
 	children,

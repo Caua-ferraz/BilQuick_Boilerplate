@@ -1,7 +1,7 @@
 "use client";
 import * as React from "react";
 import { cn } from "@/lib/utils";
-import { debounce } from "lodash";
+
 
 export interface TextareaProps
   extends Omit<React.TextareaHTMLAttributes<HTMLTextAreaElement>, 'onResize'> {
@@ -20,9 +20,15 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
     const textareaRef = React.useRef<HTMLTextAreaElement>(null);
 
     React.useImperativeHandle(ref, () => textareaRef.current!);
-
     const debouncedResize = React.useMemo(
-      () => debounce((height: number) => onResize && onResize(height), 100),
+      () => {
+        if (onResize) {
+          return (height: number) => {
+            setTimeout(() => onResize(height), 100);
+          };
+        }
+        return () => {};
+      },
       [onResize]
     );
 
@@ -56,7 +62,9 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
 
         return () => {
           resizeObserver.disconnect();
-          debouncedResize.cancel();
+          if (typeof debouncedResize === 'function' && 'cancel' in debouncedResize) {
+            (debouncedResize as { cancel: () => void }).cancel();
+          }
         };
       }
     }, [onResize, debouncedResize]);
