@@ -165,6 +165,17 @@ const HeroSection = React.memo(() => (
       <p className="text-sm sm:text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
         Stop wasting time with the website, let BilQuick handle it.
       </p>
+      <div className="mt-4 flex justify-center">
+        <a href="https://www.producthunt.com/posts/bilquick?embed=true&utm_source=badge-featured&utm_medium=badge&utm_souce=badge-bilquick" target="_blank" rel="noopener noreferrer">
+          <img 
+            src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=487452&theme=light" 
+            alt="BilQuick - Launch Your SaaS Faster | Product Hunt" 
+            style={{ width: '250px', height: '54px' }} 
+            width="250" 
+            height="54" 
+          />
+        </a>
+      </div>
     </FadeIn>
   </section>
 ));
