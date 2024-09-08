@@ -4,15 +4,18 @@ import { Metadata } from 'next';
  * Interface for SEO properties
  */
 interface SEOProps {
-  title?: string;
-  description?: string;
+  title: string;
+  description: string;
   keywords?: string;
   ogImage?: string;
   ogType?: 'website' | 'article' | 'product';
   twitterCard?: 'summary' | 'summary_large_image' | 'app' | 'player';
   canonicalUrl?: string;
-  noIndex?: boolean;
-  noFollow?: boolean;
+  locale?: string;
+  alternateLocales?: string[];
+  author?: string;
+  publishedTime?: string;
+  modifiedTime?: string;
 }
 
 /**
@@ -35,15 +38,18 @@ const defaultMeta = {
  * @returns {Metadata} Metadata object for Next.js
  */
 export function generateMetadata({
-  title = defaultMeta.title,
-  description = defaultMeta.description,
-  keywords = defaultMeta.keywords,
-  ogImage = defaultMeta.ogImage,
-  ogType = defaultMeta.ogType,
-  twitterCard = defaultMeta.twitterCard,
-  canonicalUrl = defaultMeta.canonicalUrl,
-  noIndex = false,
-  noFollow = false,
+  title,
+  description,
+  keywords,
+  ogImage,
+  ogType = 'website',
+  twitterCard = 'summary_large_image',
+  canonicalUrl,
+  locale = 'en',
+  alternateLocales = [],
+  author,
+  publishedTime,
+  modifiedTime,
 }: SEOProps): Metadata {
   const metaTitle = title === defaultMeta.title ? title : `${title} | BilQuick`;
 
@@ -51,35 +57,38 @@ export function generateMetadata({
     title: metaTitle,
     description,
     keywords: keywords?.split(',').map(keyword => keyword.trim()), // Converts keywords to an array
-    authors: [{ name: 'BilQuick Team' }],
+    authors: author ? [{ name: author }] : [{ name: 'BilQuick Team' }],
     openGraph: {
       title: metaTitle,
       description,
       type: ogType as 'article' | 'website', // Explicitly cast to allowed types
-      images: [{ url: ogImage, width: 1200, height: 630, alt: metaTitle }],
+      images: [{ url: ogImage || defaultMeta.ogImage, width: 1200, height: 630, alt: metaTitle }],
       siteName: 'BilQuick',
     },
     twitter: {
       card: twitterCard,
       title: metaTitle,
       description,
-      images: [ogImage],
+      images: ogImage ? [ogImage] : undefined,
       creator: '@BilQuickHQ',
     },
     icons: {
       icon: '/favicon.ico',
       apple: '/apple-touch-icon.png',
     },
-    metadataBase: new URL(canonicalUrl),
+    metadataBase: new URL(canonicalUrl || defaultMeta.canonicalUrl),
     alternates: {
       canonical: canonicalUrl,
+      languages: Object.fromEntries(
+        alternateLocales.map(locale => [locale, `/${locale}`])
+      ),
     },
     robots: {
-      index: !noIndex,
-      follow: !noFollow,
+      index: true,
+      follow: true,
       googleBot: {
-        index: !noIndex,
-        follow: !noFollow,
+        index: true,
+        follow: true,
       },
     },
     viewport: {
@@ -87,6 +96,8 @@ export function generateMetadata({
       initialScale: 1,
       maximumScale: 1,
     },
+    ...(publishedTime && { publishedTime }),
+    ...(modifiedTime && { modifiedTime }),
   };
 }
 
