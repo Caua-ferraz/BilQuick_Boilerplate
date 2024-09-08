@@ -1,49 +1,54 @@
 "use client";
 import * as React from "react";
 import { cn } from "@/lib/utils";
+import { debounce } from "lodash";
 
 export interface TextareaProps
   extends Omit<React.TextareaHTMLAttributes<HTMLTextAreaElement>, 'onResize'> {
-  /** Additional class name for the textarea element */
   className?: string;
-  /** Error message to display */
   error?: string;
-  /** Label for the textarea */
   label?: string;
-  /** Maximum character count */
   maxCount?: number;
-  /** Callback function when the textarea resizes */
   onResize?: (height: number) => void;
+  onTouchStart?: (e: React.TouchEvent<HTMLTextAreaElement>) => void;
 }
 
 const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
-  ({ className, error, label, maxCount, onResize, ...props }, ref) => {
+  ({ className, error, label, maxCount, onResize, onTouchStart, ...props }, ref) => {
     const textareaId = React.useId();
     const [charCount, setCharCount] = React.useState(0);
     const textareaRef = React.useRef<HTMLTextAreaElement>(null);
 
     React.useImperativeHandle(ref, () => textareaRef.current!);
 
-    const handleInput = (event: React.FormEvent<HTMLTextAreaElement>) => {
+    const debouncedResize = React.useMemo(
+      () => debounce((height: number) => onResize && onResize(height), 100),
+      [onResize]
+    );
+
+    const handleInput = React.useCallback((event: React.FormEvent<HTMLTextAreaElement>) => {
       const textarea = event.currentTarget;
       setCharCount(textarea.value.length);
 
       if (onResize) {
-        textarea.style.height = 'auto';
-        textarea.style.height = `${textarea.scrollHeight}px`;
-        onResize(textarea.scrollHeight);
+        requestAnimationFrame(() => {
+          textarea.style.height = 'auto';
+          const newHeight = textarea.scrollHeight;
+          textarea.style.height = `${newHeight}px`;
+          debouncedResize(newHeight);
+        });
       }
 
       if (props.onInput) {
         props.onInput(event);
       }
-    };
+    }, [onResize, props.onInput, debouncedResize]);
 
     React.useEffect(() => {
       if (textareaRef.current && onResize) {
         const resizeObserver = new ResizeObserver((entries) => {
           for (let entry of entries) {
-            onResize(entry.contentRect.height);
+            debouncedResize(entry.contentRect.height);
           }
         });
 
@@ -51,9 +56,31 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
 
         return () => {
           resizeObserver.disconnect();
+          debouncedResize.cancel();
         };
       }
-    }, [onResize]);
+    }, [onResize, debouncedResize]);
+
+    const memoizedCharCountDisplay = React.useMemo(() => {
+      if (!maxCount) return null;
+      return (
+        <p className={cn(
+          "text-sm text-gray-500",
+          charCount > maxCount && "text-red-500"
+        )}>
+          {charCount}/{maxCount}
+        </p>
+      );
+    }, [charCount, maxCount]);
+
+    const [isMobile, setIsMobile] = React.useState(false);
+
+    React.useEffect(() => {
+      const checkMobile = () => setIsMobile(window.innerWidth < 768);
+      checkMobile();
+      window.addEventListener('resize', checkMobile);
+      return () => window.removeEventListener('resize', checkMobile);
+    }, []);
 
     return (
       <div className="relative">
@@ -68,13 +95,16 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
         <textarea
           id={textareaId}
           className={cn(
-            "flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+            "flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+            "min-h-[80px] max-h-[300px] overflow-y-auto resize-y",
             error && "border-red-500",
             className
           )}
           ref={textareaRef}
           onInput={handleInput}
           {...props}
+          inputMode="text"
+          onTouchStart={onTouchStart}
         />
         <div className="flex justify-between mt-1">
           {error && (
@@ -82,22 +112,16 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
               {error}
             </p>
           )}
-          {maxCount && (
-            <p className={cn(
-              "text-sm text-gray-500",
-              charCount > maxCount && "text-red-500"
-            )}>
-              {charCount}/{maxCount}
-            </p>
-          )}
+          {memoizedCharCountDisplay}
         </div>
       </div>
-    )
+    );
   }
-)
-Textarea.displayName = "Textarea"
+);
 
-export { Textarea }
+Textarea.displayName = "Textarea";
+
+export { Textarea };
 
 // Customization and usage examples:
 

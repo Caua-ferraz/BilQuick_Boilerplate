@@ -1,3 +1,5 @@
+import { SpeedInsights } from "@vercel/speed-insights/next";
+import { Analytics } from "@vercel/analytics/react";
 import dynamic from 'next/dynamic';
 import React from "react";
 import Link from "next/link";
@@ -9,8 +11,8 @@ import FadeIn from "@/components/fadein";
 import { generateMetadata } from "@/components/SEO";
 import type { Metadata } from 'next';
 import { useState } from 'react';
-import WhyBetter from "@/components/WhyBetter";
 
+const WhyBetter = dynamic(() => import("@/components/WhyBetter"), { loading: () => <p>Loading WhyBetter...</p> });
 const Price = dynamic(() => import("@/components/subscription/price"), { ssr: false, loading: () => <p>Loading Pricing...</p> });
 const TypingTitle = dynamic(() => import("@/components/TypingTitle"), { loading: () => <p>Loading Title...</p> });
 const CTASection = dynamic(() => import("@/components/cta"), { loading: () => <p>Loading CTA...</p> });
@@ -207,7 +209,7 @@ export default function LandingPage() {
         <CTASection />
       </FadeIn>
 
-      {/* Why Better Section */}
+      {/* Features Section */}
       <FadeIn>
         <WhyBetter />
       </FadeIn>

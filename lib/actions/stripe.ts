@@ -1,5 +1,6 @@
 "use server";
 import Stripe from "stripe";
+
 const stripe = new Stripe(process.env.STRIPE_SK!);
 
 export async function checkout(
@@ -17,6 +18,7 @@ export async function checkout(
 		})
 	);
 }
+
 export async function manageBilling(customer_id: string) {
 	return JSON.stringify(
 		await stripe.billingPortal.sessions.create({

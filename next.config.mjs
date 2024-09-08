@@ -1,5 +1,13 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+	reactStrictMode: true,
+	swcMinify: true,
+	compiler: {
+		removeConsole: process.env.NODE_ENV !== 'development',
+	},
+	experimental: {
+		optimizeCss: true,
+	},
 	images: {
 		remotePatterns: [
 			{
@@ -12,7 +20,6 @@ const nextConfig = {
 			},
 		],
 	},
-	// Add this section
 	async headers() {
 		return [
 			{
@@ -29,6 +36,10 @@ const nextConfig = {
 					{
 						key: 'Referrer-Policy',
 						value: 'strict-origin-when-cross-origin',
+					},
+					{
+						key: 'Cache-Control',
+						value: 'public, max-age=3600, stale-while-revalidate=86400',
 					},
 				],
 			},

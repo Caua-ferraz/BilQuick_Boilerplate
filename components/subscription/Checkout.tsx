@@ -5,41 +5,24 @@ import { Button } from "@/components/ui/button";
 import useUser from "@/app/hook/useUser";
 import { useRouter } from "next/navigation";
 import { checkout } from "@/lib/actions/stripe";
-import { loadStripe } from "@stripe/stripe-js";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { cn } from "@/lib/utils";
+import LazyLoad from "@/components/LazyLoad";
+import { Stripe, loadStripe } from '@stripe/stripe-js';
 
-/**
- * CheckoutProps interface defines the expected props for the Checkout component.
- * 
- * @property priceId - The Stripe Price ID for the subscription plan
- */
 interface CheckoutProps {
     priceId: string;
 }
-/**
- * Checkout Component
- * 
- * This component handles the checkout process for a subscription plan.
- * It integrates with Stripe for payment processing.
- * 
- * @param {CheckoutProps} props - The props for the Checkout component
- */
+
 export default function Checkout({ priceId }: CheckoutProps) {
-    // Fetch the current user data
     const { data: user } = useUser();
     const router = useRouter();
-    // State to manage loading status during checkout
     const [loading, setLoading] = useState(false);
 
-    /**
-     * Handles the checkout process
-     */
     const handleCheckout = async () => {
         if (user?.id) {
             setLoading(true);
             try {
-                // Initiate checkout process with Stripe
                 const data = JSON.parse(
                     await checkout(
                         user.email,
@@ -47,7 +30,6 @@ export default function Checkout({ priceId }: CheckoutProps) {
                         location.origin + location.pathname
                     )
                 );
-                // Load Stripe and redirect to checkout
                 const stripe = await loadStripe(process.env.NEXT_PUBLIC_STRIPE_PK!);
                 const res = await stripe?.redirectToCheckout({
                     sessionId: data.id,
@@ -62,20 +44,22 @@ export default function Checkout({ priceId }: CheckoutProps) {
                 setLoading(false);
             }
         } else {
-            // Redirect to auth page if user is not logged in
             router.push("/auth?next=" + location.pathname);
         }
     };
+
     return (
-        <Button
-            className="w-full flex items-center gap-2"
-            onClick={handleCheckout}
-        >
-            Getting Started{" "}
-            <AiOutlineLoading3Quarters
-                className={cn("animate-spin", loading ? "block" : "hidden")}
-            />
-        </Button>
+        <LazyLoad>
+            <Button
+                className="w-full flex items-center gap-2"
+                onClick={handleCheckout}
+            >
+                Getting Started{" "}
+                <AiOutlineLoading3Quarters
+                    className={cn("animate-spin", loading ? "block" : "hidden")}
+                />
+            </Button>
+        </LazyLoad>
     );
 }
 
