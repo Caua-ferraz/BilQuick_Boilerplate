@@ -1,15 +1,13 @@
 "use client";
-import React, { useEffect, useRef, useState, ReactNode } from 'react';
+import { useEffect, useRef, useState, ReactNode } from 'react';
 
 interface LazyLoadProps {
   children: ReactNode;
-  placeholder?: ReactNode;
-  rootMargin?: string;
 }
 
-const LazyLoad: React.FC<LazyLoadProps> = ({ children, placeholder, rootMargin = '100px' }) => {
+const LazyLoad: React.FC<LazyLoadProps> = ({ children }) => {
   const [isVisible, setIsVisible] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
+  const ref = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -19,7 +17,7 @@ const LazyLoad: React.FC<LazyLoadProps> = ({ children, placeholder, rootMargin =
           observer.unobserve(entry.target);
         }
       },
-      { rootMargin }
+      { rootMargin: '100px' }
     );
 
     if (ref.current) {
@@ -31,13 +29,9 @@ const LazyLoad: React.FC<LazyLoadProps> = ({ children, placeholder, rootMargin =
         observer.unobserve(ref.current);
       }
     };
-  }, [rootMargin]);
+  }, []);
 
-  return (
-    <div ref={ref} className="transition-opacity duration-300 ease-in-out">
-      {isVisible ? children : placeholder || <div style={{ height: '100px' }} />}
-    </div>
-  );
+  return <div ref={ref}>{isVisible ? children : null}</div>;
 };
 
 export default LazyLoad;

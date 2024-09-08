@@ -1,6 +1,6 @@
 import React from 'react';
 import { FaRocket, FaLock, FaCode, FaCreditCard, FaChartLine, FaCogs } from 'react-icons/fa';
-import FadeIn from '@/components/fadein'; // Ensure FadeIn is safe and doesn't use eval or unsafe functions.
+import FadeIn from '@/components/fadein';
 
 const reasons = [
   {
