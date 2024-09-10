@@ -1,5 +1,5 @@
 import { SpeedInsights } from "@vercel/speed-insights/next";
-import { Analytics } from "@vercel/analytics/react";
+import { Analytics } from '@vercel/analytics/react';
 import dynamic from 'next/dynamic';
 import React from "react"
 import TechnologyStack from "@/components/TechnologyStack";;
@@ -185,6 +185,9 @@ export default function LandingPage() {
     <div className="min-h-screen bg-background flex flex-col items-center text-foreground">
       {/* Hero Section */}
       <HeroSection />
+      <Analytics />
+      <SpeedInsights />
+
 
       {/* Technology Stack Section */}
       <FadeIn>
