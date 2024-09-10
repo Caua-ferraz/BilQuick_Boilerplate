@@ -1,11 +1,11 @@
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from "@vercel/analytics/react";
 import dynamic from 'next/dynamic';
-import React from "react";
+import React from "react"
+import TechnologyStack from "@/components/TechnologyStack";;
 import Link from "next/link";
 import Image from "next/image";
 import { FaGithub, FaYoutube, FaRocket, FaLock, FaCode, FaCreditCard, FaChartLine, FaCogs, FaQuoteLeft, FaUsers } from 'react-icons/fa';
-import { SiReact, SiNextdotjs, SiSupabase, SiStripe, SiTailwindcss } from "react-icons/si";
 import { TbBrandOpenSource } from "react-icons/tb";
 import FadeIn from "@/components/fadein";
 import { generateMetadata } from "@/components/SEO";
@@ -161,9 +161,9 @@ const Footer = React.memo(() => (
 const HeroSection = React.memo(() => (
   <section className="text-center space-y-4 sm:space-y-6 py-8 sm:py-10 md:py-20 px-2 sm:px-4 w-full bg-gradient-to-b from-background to-background/80">
     <FadeIn>
-      <TypingTitle preText="Transform Your SaaS with " highlightedText="BilQuick" />
+      <TypingTitle preText="Get Your SaaS Running " highlightedText="Quick" />
       <p className="text-sm sm:text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
-        Stop wasting time with the website, let BilQuick handle it.
+        Let our boilerplate help you setting everything in seconds!
       </p>
       <div className="mt-4 flex justify-center">
         <a href="https://www.producthunt.com/posts/bilquick?embed=true&utm_source=badge-featured&utm_medium=badge&utm_souce=badge-bilquick" target="_blank" rel="noopener noreferrer">
@@ -188,31 +188,7 @@ export default function LandingPage() {
 
       {/* Technology Stack Section */}
       <FadeIn>
-        <section className="w-full py-8 sm:py-10 bg-card px-2 sm:px-4">
-          <div className="container max-w-4xl mx-auto text-center">
-            <div className="grid grid-cols-3 md:grid-cols-6 gap-4 sm:gap-6 mb-4 sm:mb-6 justify-items-center">
-              {[
-                { Icon: SiReact, name: "React", color: "text-blue-500" },
-                { Icon: SiNextdotjs, name: "Next.js", color: "text-gray-700" },
-                { Icon: SiSupabase, name: "Supabase", color: "text-green-500" },
-                { Icon: SiStripe, name: "Stripe", color: "text-purple-500" },
-                { Icon: SiTailwindcss, name: "Tailwind", color: "text-cyan-400" },
-                { Icon: TbBrandOpenSource, name: "Open Source", color: "text-orange-500" }
-              ].map(({ Icon, name, color }) => (
-                <div key={name} className="flex flex-col items-center">
-                  <Icon className={`w-6 h-6 sm:w-8 sm:h-8 md:w-12 md:h-12 ${color}`} title={name} />
-                  <span className="text-xxs sm:text-xs mt-1 sm:mt-2">{name}</span>
-                </div>
-              ))}
-            </div>
-            <p className="text-xs sm:text-sm md:text-base text-muted-foreground">
-              Built with cutting-edge technologies to save you time and effort.
-            </p>
-            <p className="text-xs sm:text-sm md:text-base text-muted-foreground mt-2">
-              Focus on your core business while we handle the website.
-            </p>
-          </div>
-        </section>
+        <TechnologyStack />
       </FadeIn>
 
       {/* CTA Section */}
