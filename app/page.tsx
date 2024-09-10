@@ -2,7 +2,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from '@vercel/analytics/react';
 import dynamic from 'next/dynamic';
 import React from "react"
-import TechnologyStack from "@/components/TechnologyStack";;
+import TechnologyStack from "@/components/TechnologyStack";
 import Link from "next/link";
 import Image from "next/image";
 import { FaGithub, FaYoutube, FaRocket, FaLock, FaCode, FaCreditCard, FaChartLine, FaCogs, FaQuoteLeft, FaUsers } from 'react-icons/fa';
