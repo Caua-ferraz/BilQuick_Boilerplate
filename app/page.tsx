@@ -168,7 +168,7 @@ const Footer = React.memo(() => (
 const HeroSection = React.memo(() => (
   <section className="text-center space-y-4 sm:space-y-6 py-8 sm:py-10 md:py-20 px-2 sm:px-4 w-full bg-gradient-to-b from-background to-background/80">
     <FadeIn>
-      <TypingTitle preText="Launch Your SaaS" highlightedText="Without the Hassle" />
+      <TypingTitle preText="Launch Your SaaS " highlightedText="Without the Hassle" />
       <p className="text-sm sm:text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
         Focus on what matters, we'll handle the basics. Launch your SaaS quickly and efficiently with BilQuick.
       </p>
