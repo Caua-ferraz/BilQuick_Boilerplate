@@ -1,17 +1,17 @@
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from '@vercel/analytics/react';
 import dynamic from 'next/dynamic';
-import React from "react"
+import React from "react";
 import TechnologyStack from "@/components/TechnologyStack";
 import Link from "next/link";
 import Image from "next/image";
-import { FaGithub, FaYoutube, FaRocket, FaLock, FaCode, FaCreditCard, FaChartLine, FaCogs, FaQuoteLeft, FaUsers } from 'react-icons/fa';
+import { FaGithub, FaYoutube, FaRocket, FaLock, FaCode, FaCreditCard, FaChartLine, FaCogs, FaQuoteLeft, FaUsers, FaDiscord } from 'react-icons/fa';
 import { TbBrandOpenSource } from "react-icons/tb";
 import FadeIn from "@/components/fadein";
 import { generateMetadata } from "@/components/SEO";
 import type { Metadata } from 'next';
-import { useState } from 'react';
 
+const FAQDropdown = dynamic(() => import("@/components/FAQDropdown"), { ssr: false, loading: () => <p>Loading Pricing...</p> });
 const WhyBetter = dynamic(() => import("@/components/WhyBetter"), { loading: () => <p>Loading WhyBetter...</p> });
 const Price = dynamic(() => import("@/components/subscription/price"), { ssr: false, loading: () => <p>Loading Pricing...</p> });
 const TypingTitle = dynamic(() => import("@/components/TypingTitle"), { loading: () => <p>Loading Title...</p> });
@@ -19,8 +19,8 @@ const CTASection = dynamic(() => import("@/components/cta"), { loading: () => <p
 const Carousel = dynamic(() => import("@/components/ui/carousel").then(mod => mod.Carousel), { ssr: false, loading: () => <p>Loading Carousel...</p> });
 
 export const metadata: Metadata = generateMetadata({
-  title: "BilQuick - Launch Your SaaS Faster",
-  description: "BilQuick is the ultimate SaaS boilerplate. Build and launch your startup in days, not months. Next.js, React, Tailwind CSS, and more.",
+  title: "BilQuick - No BS, Just Results",
+  description: "BilQuick is the boilerplate that cuts the crap. Build and launch your startup fast without getting bogged down in the details.",
   keywords: "saas boilerplate, next.js template, react starter, tailwind css, supabase, stripe integration, rapid development",
   ogType: "website",
   twitterCard: "summary_large_image"
@@ -29,56 +29,56 @@ export const metadata: Metadata = generateMetadata({
 const features = [
   {
     icon: <FaRocket className="w-8 h-8 text-primary" />,
-    title: "Rapid Development",
-    description: "Launch your SaaS in days, not months. Our boilerplate provides a solid foundation with pre-built components and integrations."
+    title: "Launch Fast",
+    description: "No nonsense. Get your SaaS up and running in days with pre-built components and integrations."
   },
   {
     icon: <FaLock className="w-8 h-8 text-primary" />,
-    title: "Authentication & Authorization",
-    description: "Secure user management system with social logins, role-based access control, and JWT authentication out of the box."
+    title: "Secure Auth",
+    description: "Built-in user management, social logins, role-based access, and JWT authentication."
   },
   {
     icon: <FaCode className="w-8 h-8 text-primary" />,
-    title: "Modern Tech Stack",
-    description: "Built with Next.js, React, TypeScript, and Tailwind CSS for a powerful, flexible, and maintainable codebase."
+    title: "Modern Stack",
+    description: "Next.js, React, Tailwind CSS, and TypeScript for a future-proof and flexible codebase."
   },
   {
     icon: <FaCreditCard className="w-8 h-8 text-primary" />,
-    title: "Subscription Management",
-    description: "Integrated Stripe payment system with subscription plans, usage-based billing, and invoice generation."
+    title: "Subscription Ready",
+    description: "Stripe integration for handling subscriptions, billing, and invoices right out of the box."
   },
   {
     icon: <FaChartLine className="w-8 h-8 text-primary" />,
-    title: "Analytics Dashboard",
-    description: "Ready-to-use admin dashboard with key metrics, user analytics, and customizable charts for data-driven decisions."
+    title: "Analytics Built In",
+    description: "Get the insights you need with pre-built dashboards for user metrics and business decisions."
   },
   {
     icon: <FaCogs className="w-8 h-8 text-primary" />,
-    title: "Customizable & Extendable",
-    description: "Easily customize the UI, add new features, or integrate additional services to fit your specific SaaS needs."
+    title: "Fully Customizable",
+    description: "Tailor the UI, extend the functionality, and integrate any third-party service to fit your needs."
   }
 ];
 
 const testimonials = [
   {
-    quote: "BilQuick's boilerplate accelerated our development process by 70%. We launched our SaaS in record time.",
-    author: "CTO, TechStart Inc.",
-    benefit: "Rapid Development"
+    quote: "I was drowning in tech debt. BilQuick threw me a lifeline, and now I ship faster than my competitors.",
+    author: "Josh, Founder @ SpeedStack",
+    benefit: "Saves Time"
   },
   {
-    quote: "The built-in authentication and payment integration saved us months of work. It's rock-solid and production-ready.",
-    author: "Lead Developer, InnoSoft Solutions",
-    benefit: "Secure & Integrated"
+    quote: "Honestly, I’m lazy. BilQuick did all the heavy lifting. Now, I get to focus on the cool stuff.",
+    author: "Amy, Solo Founder",
+    benefit: "Developer-Friendly"
   },
   {
-    quote: "As a solo founder, this boilerplate was a game-changer. I could focus on my unique features instead of the basics.",
-    author: "Founder, SoloPreneurApp",
-    benefit: "Perfect for Startups"
+    quote: "BilQuick helped me skip the boring parts. I launched my app in days, not weeks.",
+    author: "Eric, Developer @ QuickApp",
+    benefit: "Launch Fast"
   },
   {
-    quote: "The customizable dashboard and analytics helped us make data-driven decisions from day one.",
-    author: "Product Manager, DataDriven Co.",
-    benefit: "Insightful Analytics"
+    quote: "The analytics dashboard gave me real insights from day one. I knew exactly where to focus.",
+    author: "Sam, Product Manager @ Insights.io",
+    benefit: "Data-Driven"
   }
 ];
 
@@ -102,9 +102,12 @@ const TestimonialCard = React.memo(({ quote, author, benefit }: { quote: string;
 const TestimonialsSection = React.memo(() => (
   <section className="w-full py-16 bg-gradient-to-b from-background to-card">
     <div className="container max-w-6xl mx-auto px-4">
+      {/* Heading for testimonials */}
       <FadeIn>
-        <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">What Our Users Say</h2>
+        <h2 className="text-3xl md:text-4xl font-bold text-center mb-8">What Our Users Are Saying</h2>
       </FadeIn>
+
+      {/* Testimonial Carousel */}
       <Carousel>
         {testimonials.map((testimonial, index) => (
           <FadeIn key={index}>
@@ -123,15 +126,19 @@ const TestimonialsSection = React.memo(() => (
           </FadeIn>
         ))}
       </Carousel>
+
+      {/* CTA Button at the bottom for joining the Discord community */}
       <FadeIn>
-        <div className="mt-8 text-center">
-          <div className="inline-flex items-center bg-primary text-primary-foreground px-4 py-2 rounded-full shadow-lg">
-            <FaUsers className="text-lg mr-2" />
-            <span className="text-base font-bold">{userCount}+ Users</span>
-          </div>
-          <p className="mt-2 text-sm text-muted-foreground">
-            Join the growing community of developers using BilQuick
-          </p>
+        <div className="mt-12 text-center">
+          <a
+            href="https://discord.gg/nrr3YrxSJj"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="bg-primary text-white px-8 py-3 rounded-lg shadow-lg hover:bg-primary-dark transition-colors inline-flex items-center space-x-2"
+          >
+            <FaDiscord className="text-2xl" /> {/* Discord icon */}
+            <span>Join the BilQuick Community on Discord </span>
+          </a>
         </div>
       </FadeIn>
     </div>
@@ -161,24 +168,14 @@ const Footer = React.memo(() => (
 const HeroSection = React.memo(() => (
   <section className="text-center space-y-4 sm:space-y-6 py-8 sm:py-10 md:py-20 px-2 sm:px-4 w-full bg-gradient-to-b from-background to-background/80">
     <FadeIn>
-      <TypingTitle preText="Get Your SaaS Running " highlightedText="Quick" />
+      <TypingTitle preText="Launch Your SaaS" highlightedText="Without the Hassle" />
       <p className="text-sm sm:text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
-        Let our boilerplate help you setting everything in seconds!
+        Focus on what matters, we'll handle the basics. Launch your SaaS quickly and efficiently with BilQuick.
       </p>
-      <div className="mt-4 flex justify-center">
-        <a href="https://www.producthunt.com/posts/bilquick?embed=true&utm_source=badge-featured&utm_medium=badge&utm_souce=badge-bilquick" target="_blank" rel="noopener noreferrer">
-          <img 
-            src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=487452&theme=light" 
-            alt="BilQuick - Launch Your SaaS Faster | Product Hunt" 
-            style={{ width: '250px', height: '54px' }} 
-            width="250" 
-            height="54" 
-          />
-        </a>
-      </div>
     </FadeIn>
   </section>
 ));
+
 
 export default function LandingPage() {
   return (
@@ -187,7 +184,6 @@ export default function LandingPage() {
       <HeroSection />
       <Analytics />
       <SpeedInsights />
-
 
       {/* Technology Stack Section */}
       <FadeIn>
@@ -222,9 +218,22 @@ export default function LandingPage() {
       {/* Testimonials Section */}
       <TestimonialsSection />
 
+      {/* FAQ Section */}
+      <FAQDropdown />
+
       {/* Footer Section */}
       <FadeIn>
         <Footer />
+        <div className="mt-4 flex justify-center">
+          <a href="https://www.producthunt.com/posts/bilquick?embed=true&utm_source=badge-featured&utm_medium=badge&utm_souce=badge-bilquick" target="_blank" rel="noopener noreferrer">
+            <img 
+              src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=487452&theme=light" 
+              alt="BilQuick - Launch Your SaaS Faster | Product Hunt" 
+              width="180" 
+              height="40" 
+            />
+          </a>
+        </div>
       </FadeIn>
     </div>
   );
