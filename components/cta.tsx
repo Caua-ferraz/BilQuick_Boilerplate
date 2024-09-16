@@ -33,7 +33,7 @@ const CTASection: React.FC = () => {
     <section className="w-full text-white py-16 px-4">
       <div className="max-w-4xl mx-auto text-center">
         <h2 className="text-3xl md:text-4xl font-bold mb-4">
-          Our Cutting edge technologies will help you get your dream saas <span className="text-orange-400">Running</span>!
+          Let us help you get your dream saas <span className="text-orange-400">Running</span>!
         </h2>
         <p className="text-xl mb-8">
           Make building your website easy, so you can focus on the core of your business
