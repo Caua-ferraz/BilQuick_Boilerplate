@@ -25,7 +25,7 @@ export default function AuthComponent() {
 			<div className=" w-96 rounded-md border p-5 space-y-5 relative bg-slate-900">
 				<div className="flex items-center gap-2">
 					<KeyRound />
-					<h1 className="text-2xl font-bold">Next + Supabase</h1>
+					<h1 className="text-2xl font-bold">Bilquick Boilerplate</h1>
 				</div>
 
 				<p className="text-sm text-gray-300">
