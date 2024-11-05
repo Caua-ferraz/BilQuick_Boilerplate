@@ -10,14 +10,26 @@ import { useSearchParams } from "next/navigation";
 export default function AuthComponent() {
 	const params = useSearchParams();
 	const next = params.get("next") || "";
-	const handleLoginWithOAuth = (provider: "github" | "google") => {
+	const handleLoginWithOAuth = async (provider: "github" | "google") => {
 		const supabase = supabaseBrowser();
-		supabase.auth.signInWithOAuth({
-			provider,
-			options: {
-				redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback?next=${next}`,
-			},
-		});
+		
+		try {
+			const { data, error } = await supabase.auth.signInWithOAuth({
+				provider,
+				options: {
+					redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback`,
+					queryParams: {
+						access_type: 'offline',
+						prompt: 'consent',
+					},
+				},
+			});
+
+			if (error) throw error;
+			
+		} catch (error) {
+			console.error('OAuth error:', error);
+		}
 	};
 
 	return (
