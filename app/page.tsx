@@ -10,6 +10,8 @@ import { TbBrandOpenSource } from "react-icons/tb";
 import FadeIn from "@/components/fadein";
 import { generateMetadata } from "@/components/SEO";
 import type { Metadata } from 'next';
+import { createServerClient } from "@supabase/ssr";
+import { cookies } from "next/headers";
 
 const FAQDropdown = dynamic(() => import("@/components/FAQDropdown"), { ssr: false, loading: () => <p>Loading Pricing...</p> });
 const WhyBetter = dynamic(() => import("@/components/WhyBetter"), { loading: () => <p>Loading WhyBetter...</p> });
@@ -176,65 +178,84 @@ const HeroSection = React.memo(() => (
   </section>
 ));
 
+async function getSession() {
+    const cookieStore = cookies();
+    const supabase = createServerClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+        {
+            cookies: {
+                get(name: string) {
+                    return cookieStore.get(name)?.value;
+                },
+            },
+        }
+    );
+    
+    const { data: { session } } = await supabase.auth.getSession();
+    return session;
+}
 
-export default function LandingPage() {
-  return (
-    <div className="min-h-screen bg-background flex flex-col items-center text-foreground">
-      {/* Hero Section */}
-      <HeroSection />
-      <Analytics />
-      <SpeedInsights />
+export default async function LandingPage() {
+    const session = await getSession();
+    
+    return (
+        <div className="min-h-screen bg-background flex flex-col items-center text-foreground">
+            {/* Hero Section */}
+            <HeroSection />
+            <Analytics />
+            <SpeedInsights />
 
-      {/* Technology Stack Section */}
-      <FadeIn>
-        <TechnologyStack />
-      </FadeIn>
+            {/* Technology Stack Section */}
+            <FadeIn>
+                <TechnologyStack />
+            </FadeIn>
 
-      {/* CTA Section */}
-      <FadeIn>
-        <CTASection />
-      </FadeIn>
+            {/* CTA Section */}
+            <FadeIn>
+                <CTASection />
+            </FadeIn>
 
-      {/* Features Section */}
-      <FadeIn>
-        <WhyBetter />
-      </FadeIn>
+            {/* Features Section */}
+            <FadeIn>
+                <WhyBetter />
+            </FadeIn>
 
-      {/* Pricing Section */}
-      <section id="price-section" className="container max-w-3xl text-center space-y-6 sm:space-y-10 px-2 sm:px-4 py-8 sm:py-10 md:py-20">
-        <FadeIn>
-          <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground">Simple and Transparent Pricing</h2>
-        </FadeIn>
-        <FadeIn>
-          <p className="text-xs sm:text-sm md:text-base text-muted-foreground">
-            Choose the best plan that fits your billing needs.
-          </p>
-        </FadeIn>
-        <FadeIn>
-          <Price />
-        </FadeIn>
-      </section>
+            {/* Pricing Section */}
+            <section id="price-section" className="container max-w-3xl text-center space-y-6 sm:space-y-10 px-2 sm:px-4 py-8 sm:py-10 md:py-20">
+                <FadeIn>
+                    <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground">Simple and Transparent Pricing</h2>
+                </FadeIn>
+                <FadeIn>
+                    <p className="text-xs sm:text-sm md:text-base text-muted-foreground">
+                        Choose the best plan that fits your billing needs.
+                    </p>
+                </FadeIn>
+                <FadeIn>
+                    <Price />
+                </FadeIn>
+            </section>
 
-      {/* Testimonials Section */}
-      <TestimonialsSection />
+            {/* Testimonials Section */}
+            <TestimonialsSection />
 
-      {/* FAQ Section */}
-      <FAQDropdown />
+            {/* FAQ Section */}
+            <FAQDropdown />
 
-      {/* Footer Section */}
-      <FadeIn>
-        <Footer />
-        <div className="mt-4 flex justify-center">
-          <a href="https://www.producthunt.com/posts/bilquick?embed=true&utm_source=badge-featured&utm_medium=badge&utm_souce=badge-bilquick" target="_blank" rel="noopener noreferrer">
-            <img 
-              src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=487452&theme=light" 
-              alt="BilQuick - Launch Your SaaS Faster | Product Hunt" 
-              width="180" 
-              height="40" 
-            />
-          </a>
+            {/* Footer Section */}
+            <FadeIn>
+                <Footer />
+                <div className="mt-4 flex justify-center">
+                    <a href="https://www.producthunt.com/posts/bilquick?embed=true&utm_source=badge-featured&utm_medium=badge&utm_souce=badge-bilquick" target="_blank" rel="noopener noreferrer">
+                        <img 
+                            src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=487452&theme=light" 
+                            alt="BilQuick - Launch Your SaaS Faster | Product Hunt" 
+                            width="180" 
+                            height="40" 
+                        />
+                    </a>
+                </div>
+            </FadeIn>
         </div>
-      </FadeIn>
-    </div>
-  );
+    );
 }
