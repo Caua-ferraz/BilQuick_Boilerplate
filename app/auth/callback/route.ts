@@ -1,10 +1,11 @@
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
-import { createServerClient, type CookieOptions } from "@supabase/ssr";
+import { type CookieOptions, createServerClient } from "@supabase/ssr";
 
 export async function GET(request: Request) {
 	const { searchParams, origin } = new URL(request.url);
 	const code = searchParams.get("code");
+	// if "next" is in param, use it as the redirect URL
 	const next = searchParams.get("next") ?? "/";
 
 	if (code) {
@@ -26,26 +27,12 @@ export async function GET(request: Request) {
 				},
 			}
 		);
-
-		try {
-			const { error } = await supabase.auth.exchangeCodeForSession(code);
-			if (!error) {
-				const response = NextResponse.redirect(new URL(next, origin));
-				
-				cookieStore.getAll().forEach(cookie => {
-					response.cookies.set(cookie.name, cookie.value, {
-						...cookie,
-						sameSite: 'lax',
-						secure: true
-					});
-				});
-				
-				return response;
-			}
-		} catch (error) {
-			console.error('Auth error:', error);
+		const { error } = await supabase.auth.exchangeCodeForSession(code);
+		if (!error) {
+			return NextResponse.redirect(`${origin}${next}`);
 		}
 	}
 
-	return NextResponse.redirect(new URL('/auth/auth-code-error', origin));
+	// return the user to an error page with instructions
+	return NextResponse.redirect(`${origin}/auth/auth-code-error`);
 }

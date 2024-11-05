@@ -10,26 +10,14 @@ import { useSearchParams } from "next/navigation";
 export default function AuthComponent() {
 	const params = useSearchParams();
 	const next = params.get("next") || "";
-	const handleLoginWithOAuth = async (provider: "github" | "google") => {
+	const handleLoginWithOAuth = (provider: "github" | "google") => {
 		const supabase = supabaseBrowser();
-		
-		try {
-			const { data, error } = await supabase.auth.signInWithOAuth({
-				provider,
-				options: {
-					redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback`,
-					queryParams: {
-						access_type: 'offline',
-						prompt: 'consent',
-					},
-				},
-			});
-
-			if (error) throw error;
-			
-		} catch (error) {
-			console.error('OAuth error:', error);
-		}
+		supabase.auth.signInWithOAuth({
+			provider,
+			options: {
+				redirectTo: `${window.location.origin}/auth/callback?next=${next}`,
+			},
+		});
 	};
 
 	return (
@@ -37,11 +25,11 @@ export default function AuthComponent() {
 			<div className=" w-96 rounded-md border p-5 space-y-5 relative bg-slate-900">
 				<div className="flex items-center gap-2">
 					<KeyRound />
-					<h1 className="text-2xl font-bold">Bilquick Boilerplate</h1>
+					<h1 className="text-2xl font-bold">Next + Supabase</h1>
 				</div>
 
 				<p className="text-sm text-gray-300">
-					Register/SignIn Today 👇
+					Register/SignIn Today
 				</p>
 				<div className="flex flex-col gap-5">
 					<Button
