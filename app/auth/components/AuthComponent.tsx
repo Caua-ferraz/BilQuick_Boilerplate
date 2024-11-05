@@ -15,7 +15,7 @@ export default function AuthComponent() {
 		supabase.auth.signInWithOAuth({
 			provider,
 			options: {
-				redirectTo: `${window.location.origin}/auth/callback?next=${next}`,
+				redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback?next=${next}`,
 			},
 		});
 	};
@@ -29,7 +29,7 @@ export default function AuthComponent() {
 				</div>
 
 				<p className="text-sm text-gray-300">
-					Register/SignIn Today
+					Register/SignIn Today 👇
 				</p>
 				<div className="flex flex-col gap-5">
 					<Button
