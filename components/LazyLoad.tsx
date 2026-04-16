@@ -10,6 +10,9 @@ const LazyLoad: React.FC<LazyLoadProps> = ({ children }) => {
   const ref = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
+    const node = ref.current;
+    if (!node) return;
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -20,15 +23,8 @@ const LazyLoad: React.FC<LazyLoadProps> = ({ children }) => {
       { rootMargin: '100px' }
     );
 
-    if (ref.current) {
-      observer.observe(ref.current);
-    }
-
-    return () => {
-      if (ref.current) {
-        observer.unobserve(ref.current);
-      }
-    };
+    observer.observe(node);
+    return () => observer.unobserve(node);
   }, []);
 
   return <div ref={ref}>{isVisible ? children : null}</div>;

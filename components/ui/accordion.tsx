@@ -44,11 +44,12 @@ export function Accordion({ children, type = "single", collapsible = false, clas
 	return (
 		<div className={cn("border rounded-lg", className)}>
 			{React.Children.map(children, child => {
-				if (React.isValidElement(child) && child.type === AccordionItem) {
-					return React.cloneElement(child, { 
-						isOpen: openItems.includes(child.props.value as string),
-						onToggle: () => toggleItem(child.props.value as string)
-					} as Partial<AccordionItemProps>);
+				if (React.isValidElement<AccordionItemProps>(child) && child.type === AccordionItem) {
+					const value = child.props.value;
+					return React.cloneElement(child, {
+						isOpen: openItems.includes(value),
+						onToggle: () => toggleItem(value),
+					});
 				}
 				return child;
 			})}
@@ -82,7 +83,7 @@ interface AccordionItemProps {
  * 
  * @param {AccordionItemProps} props - The props for the AccordionItem component
  */
-export function AccordionItem({ value, children, className, isOpen, onToggle }: AccordionItemProps) {
+export function AccordionItem({ children, className, isOpen, onToggle }: AccordionItemProps) {
 	return (
 		<div className={cn("border-b last:border-none", className)}>
 			{React.Children.map(children, child => {

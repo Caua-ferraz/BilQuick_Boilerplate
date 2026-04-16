@@ -64,7 +64,7 @@ This boilerplate provides a solid foundation for building modern SaaS applicatio
 │ │ └── page.tsx
 │ ├── hook/
 │ │ └── useUser.ts
-│ ├── privacity/
+│ ├── privacy/
 │ │ └── page.tsx
 │ ├── success/
 │ │ └── page.tsx

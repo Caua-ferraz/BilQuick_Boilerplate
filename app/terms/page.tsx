@@ -1,8 +1,6 @@
 import React from 'react';
 import FadeIn from "@/components/fadein";
 import TypingTitle from "@/components/TypingTitle";
-import Link from 'next/link';
-import { Button } from "@/components/ui/button";
 
 export default function TermsOfServicePage() {
   const terms = [

@@ -19,9 +19,9 @@ import Link from "next/link";
 export default function Navbar() {
 	return (
 		<div className="flex justify-between items-center h-20">
-			{/* Logo/Home link */}
+			{/* Logo/Home link — TODO: replace with your brand name or an <Image> logo */}
 			<Link href="/">
-				<h1 className="text-xl font-bold">BilQuick</h1>
+				<h1 className="text-xl font-bold">Your SaaS</h1>
 			</Link>
 
 			{/* Profile component */}

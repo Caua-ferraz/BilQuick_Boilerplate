@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import useUser from "../hook/useUser";
+import useUser from "@/hooks/useUser";
 import Post from "./components/Post";
 import Price from "@/components/subscription/price";
 

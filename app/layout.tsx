@@ -4,7 +4,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import QueryProvider from "@/components/query-provider";
 import Navbar from "@/components/Navbar";
-import { generateMetadata } from "@/components/SEO";
+import { generateMetadata, viewport as defaultViewport } from "@/components/SEO";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -12,6 +12,8 @@ export const metadata: Metadata = generateMetadata({
   title: "Your Site Title",
   description: "Your site description goes here"
 });
+
+export const viewport = defaultViewport;
 
 export default function RootLayout({
 	children,

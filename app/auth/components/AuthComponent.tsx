@@ -9,15 +9,13 @@ import { useSearchParams } from "next/navigation";
 
 export default function AuthComponent() {
 	const params = useSearchParams();
-	const next = params.get("next") || "";
+	const rawNext = params.get("next") ?? "";
+	// Only allow same-site relative paths; the callback re-validates anyway.
+	const next = rawNext.startsWith("/") && !rawNext.startsWith("//") ? rawNext : "/";
 	const handleLoginWithOAuth = (provider: "github" | "google") => {
 		const supabase = supabaseBrowser();
-		supabase.auth.signInWithOAuth({
-			provider,
-			options: {
-				redirectTo: `${window.location.origin}/auth/callback?next=${next}`,
-			},
-		});
+		const redirectTo = `${window.location.origin}/auth/callback?next=${encodeURIComponent(next)}`;
+		supabase.auth.signInWithOAuth({ provider, options: { redirectTo } });
 	};
 
 	return (

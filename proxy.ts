@@ -2,85 +2,59 @@ import { createServerClient, type CookieOptions } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 import { protectedPaths } from "./lib/constant";
 
-export async function middleware(request: NextRequest) {
-	let response = NextResponse.next({
-		request: {
-			headers: request.headers,
-		},
-	});
+type CookieToSet = { name: string; value: string; options: CookieOptions };
+
+export async function proxy(request: NextRequest) {
+	let response = NextResponse.next({ request });
 
 	const supabase = createServerClient(
 		process.env.NEXT_PUBLIC_SUPABASE_URL!,
 		process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
 		{
 			cookies: {
-				get(name: string) {
-					return request.cookies.get(name)?.value;
+				getAll() {
+					return request.cookies.getAll();
 				},
-				set(name: string, value: string, options: CookieOptions) {
-					request.cookies.set({
-						name,
-						value,
-						...options,
-					});
-					response = NextResponse.next({
-						request: {
-							headers: request.headers,
-						},
-					});
-					response.cookies.set({
-						name,
-						value,
-						...options,
-					});
-				},
-				remove(name: string, options: CookieOptions) {
-					request.cookies.set({
-						name,
-						value: "",
-						...options,
-					});
-					response = NextResponse.next({
-						request: {
-							headers: request.headers,
-						},
-					});
-					response.cookies.set({
-						name,
-						value: "",
-						...options,
-					});
+				setAll(cookiesToSet: CookieToSet[]) {
+					for (const { name, value } of cookiesToSet) {
+						request.cookies.set(name, value);
+					}
+					response = NextResponse.next({ request });
+					for (const { name, value, options } of cookiesToSet) {
+						response.cookies.set(name, value, options);
+					}
 				},
 			},
 		}
 	);
 
-	const { data } = await supabase.auth.getSession();
+	const {
+		data: { user },
+	} = await supabase.auth.getUser();
+
 	const url = new URL(request.url);
-	if (data.session) {
-		if (url.pathname === "/auth") {
+	const path = url.pathname;
+
+	if (user) {
+		if (path === "/auth") {
 			return NextResponse.redirect(new URL("/", url.origin));
 		}
-		return response;
-	} else {
-		if (protectedPaths.includes(url.pathname)) {
-			return NextResponse.redirect(
-				new URL(`/auth?next=${url.pathname}`, url.origin)
-			);
-		}
-		return response;
+	} else if (protectedPaths.includes(path)) {
+		const redirectUrl = new URL("/auth", url.origin);
+		redirectUrl.searchParams.set("next", path);
+		return NextResponse.redirect(redirectUrl);
 	}
+
+	return response;
 }
 
 export const config = {
 	matcher: [
 		/*
-		 * Match all request paths except for the ones starting with:
-		 * - _next/static (static files)
-		 * - _next/image (image optimization files)
-		 * - favicon.ico (favicon file)
-		 * Feel free to modify this pattern to include more paths.
+		 * Match all request paths except:
+		 * - _next/static, _next/image, favicon, robots, sitemap, public assets
+		 * - API routes (handled directly; webhook needs raw body and no auth refresh)
 		 */
-		"/((?!_next/static|_next/image|favicon.ico).*)",
+		"/((?!_next/static|_next/image|favicon.ico|robots.txt|sitemap.xml|api/webhook|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico)$).*)",
 	],
 };

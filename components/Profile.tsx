@@ -2,7 +2,7 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import useUser from "@/app/hook/useUser";
+import useUser from "@/hooks/useUser";
 import Image from "next/image";
 import { supabaseBrowser } from "@/lib/supabase/browser";
 import { useQueryClient } from "@tanstack/react-query";
@@ -40,21 +40,12 @@ export default function Profile() {
 	};
 
 	const handleBilling = async () => {
-		if (data?.subscription?.customer_id) {
-			try {
-				const response = await manageBilling(data.subscription.customer_id);
-				const billingData = JSON.parse(response);
-				if (billingData.error) {
-					console.error(billingData.error);
-					// Handle the error appropriately (e.g., show an error message to the user)
-				} else {
-					window.location.href = billingData.url;
-				}
-			} catch (error) {
-				console.error("Error handling billing:", error);
-				// Handle the error appropriately (e.g., show an error message to the user)
-			}
+		const result = await manageBilling();
+		if (!result.ok) {
+			console.error(result.error);
+			return;
 		}
+		window.location.href = result.url;
 	};
 
 	const isSubscriber = !!data?.subscription?.subscription_id;

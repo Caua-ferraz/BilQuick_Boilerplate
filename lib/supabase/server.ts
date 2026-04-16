@@ -2,54 +2,29 @@ import { createServerClient, type CookieOptions } from "@supabase/ssr";
 import { cookies } from "next/headers";
 import { Database } from "../types/supabase";
 
-export function supabaseServer() {
-        const cookieStore = cookies();
+type CookieToSet = { name: string; value: string; options: CookieOptions };
 
-        const safeCookieOperation = (operation: () => void) => {
-                try {
-                        operation();
-                } catch (error) {
-                        if (
-                                !(
-                                        error instanceof Error &&
-                                        error.message.includes(
-                                                "Cookies can only be modified in a Server Action or Route Handler"
-                                        )
-                                )
-                        ) {
-                                throw error;
-                        }
-                }
-        };
+export async function supabaseServer() {
+	const cookieStore = await cookies();
 
-        return createServerClient<Database>(
-                process.env.NEXT_PUBLIC_SUPABASE_URL!,
-                process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-                {
-                        cookies: {
-                                get(name: string) {
-                                        return cookieStore.get(name)?.value;
-                                },
-                                set(name: string, value: string, options: CookieOptions) {
-                                        safeCookieOperation(() =>
-                                                cookieStore.set({
-                                                        name,
-                                                        value,
-                                                        ...options,
-                                                })
-                                        );
-                                },
-                                remove(name: string, options: CookieOptions) {
-                                        safeCookieOperation(() =>
-                                                cookieStore.set({
-                                                        name,
-                                                        value: "",
-                                                        ...options,
-                                                        maxAge: 0,
-                                                })
-                                        );
-                                },
-                        },
-                }
-        );
+	return createServerClient<Database>(
+		process.env.NEXT_PUBLIC_SUPABASE_URL!,
+		process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+		{
+			cookies: {
+				getAll() {
+					return cookieStore.getAll();
+				},
+				setAll(cookiesToSet: CookieToSet[]) {
+					try {
+						for (const { name, value, options } of cookiesToSet) {
+							cookieStore.set(name, value, options);
+						}
+					} catch {
+						// Called from a Server Component — refresh happens in middleware.
+					}
+				},
+			},
+		}
+	);
 }

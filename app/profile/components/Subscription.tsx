@@ -1,5 +1,5 @@
 "use client";
-import useUser from "@/app/hook/useUser";
+import useUser from "@/hooks/useUser";
 import { Button } from "@/components/ui/button";
 import { manageBilling } from "@/lib/actions/stripe";
 import React from "react";
@@ -11,12 +11,12 @@ export default function Subscription() {
 	}
 
 	const handleBilling = async () => {
-		if (user?.subscription?.customer_id) {
-			const data = JSON.parse(
-				await manageBilling(user?.subscription?.customer_id)
-			);
-			window.location.href = data.url;
+		const result = await manageBilling();
+		if (!result.ok) {
+			console.error(result.error);
+			return;
 		}
+		window.location.href = result.url;
 	};
 	return (
 		<div className=" space-y-5">

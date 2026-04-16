@@ -30,19 +30,25 @@ const TypingTitle: React.FC<TypingTitleProps> = ({
 
   // Typing animation handler using requestAnimationFrame
   const typeText = useCallback(() => {
+    let rafId = 0;
+    let timerId: ReturnType<typeof setTimeout> | undefined;
     const updateText = () => {
       if (currentIndex.current < fullText.length) {
         setDisplayedText(fullText.slice(0, currentIndex.current + 1));
         currentIndex.current++;
-        setTimeout(() => requestAnimationFrame(updateText), speed); // Delay for typing effect
+        timerId = setTimeout(() => {
+          rafId = requestAnimationFrame(updateText);
+        }, speed);
       } else {
         setIsTypingComplete(true);
       }
     };
-    requestAnimationFrame(updateText);
+    rafId = requestAnimationFrame(updateText);
 
-    // Cleanup in case of unmount
-    return () => cancelAnimationFrame(updateText as any);
+    return () => {
+      if (timerId) clearTimeout(timerId);
+      cancelAnimationFrame(rafId);
+    };
   }, [fullText, speed]);
 
   useEffect(() => {

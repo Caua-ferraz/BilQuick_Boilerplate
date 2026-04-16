@@ -6,9 +6,6 @@ import { Check, ChevronRight, Circle } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 
-// Reusable styles
-const menuItemStyles = "relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50"
-
 /**
  * Base Dropdown Menu Components
  * These components are direct exports from Radix UI and don't require additional logic

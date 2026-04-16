@@ -1,8 +1,6 @@
 import React from 'react';
 import FadeIn from "@/components/fadein";
 import TypingTitle from "@/components/TypingTitle";
-import Link from 'next/link';
-import { Button } from "@/components/ui/button";
 
 export default function PrivacyPolicyPage() {
   const policies = [
@@ -103,11 +101,8 @@ export default function PrivacyPolicyPage() {
         <FadeIn>
           <div className="text-center mt-8 space-y-4">
             <p className="text-sm md:text-base text-muted-foreground">
-              If you have any questions about this Privacy Policy or our data practices, please contact us:
+              If you have any questions about this Privacy Policy or our data practices, please contact us.
             </p>
-            <Button asChild>
-              <Link href="/contact">Contact Us</Link>
-            </Button>
           </div>
         </FadeIn>
       </section>
